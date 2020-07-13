@@ -1,50 +1,43 @@
 package com.example.sns.view
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseActivity
 import com.example.sns.databinding.ActivityLoginBinding
 import com.example.sns.retrofit.RetrofitClient
+import com.example.sns.ui.dashboard.DashboardFragment
 import com.example.sns.viewModel.LoginViewModel
+import com.example.sns.widget.startActivity
+import org.koin.android.viewmodel.ext.android.getViewModel
 
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
     override val viewModel: LoginViewModel
-        get() = get
+        get() = getViewModel(LoginViewModel::class.java)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override val layoutRes: Int
+        get() = R.layout.activity_login
 
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
-        mViewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+    override fun init() { viewModel.retrofit = RetrofitClient.getInstance()}
 
-        mBinding.viewModel = mViewModel
-        mBinding.lifecycleOwner = this
-        mBinding.executePendingBindings()
 
-        mViewModel.retrofit = RetrofitClient.getInstance()
-
-        with(mViewModel){
+    override fun observerViewModel() {
+        with(viewModel){
             btn.observe(this@LoginActivity, Observer {
                 getlogindata()
                 if(checkLogin == true) {
                     Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
-                    startActivity(MainPageFragment::class.java)
+                    startActivity(DashboardFragment::class.java)
                 }
                 else if(checkLogin == false){
                     Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
                 }
             })
-        }
 
-        with(mViewModel){
             btn.observe(this@LoginActivity, Observer {
                 startActivity(RegisterActivity::class.java)
             })
         }
-
     }
 }
