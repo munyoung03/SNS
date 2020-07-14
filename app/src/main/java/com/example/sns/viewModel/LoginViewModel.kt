@@ -1,6 +1,5 @@
 package com.example.sns.viewModel
 
-import android.icu.text.IDNA
 import androidx.lifecycle.MutableLiveData
 import com.example.sns.base.BaseViewModel
 import com.example.sns.retrofit.Dao
@@ -17,7 +16,7 @@ class LoginViewModel : BaseViewModel(){
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
 
-    var checkLogin : Boolean? = null
+    var checkLogin : Boolean = false
 
     lateinit var myAPI : Dao
     lateinit var retrofit: Retrofit
