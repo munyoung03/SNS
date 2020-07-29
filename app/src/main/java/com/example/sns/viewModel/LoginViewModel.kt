@@ -15,6 +15,7 @@ class LoginViewModel : BaseViewModel(){
     val btn = SingleLiveEvent<Unit>()
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
+    val body = HashMap<String, String>()
 
     var checkLogin : Boolean = false
 
@@ -22,8 +23,9 @@ class LoginViewModel : BaseViewModel(){
     lateinit var retrofit: Retrofit
 
     fun getlogindata() {
+        body.put(email.value.toString(), password.value.toString())
         myAPI = retrofit.create(Dao::class.java)
-        myAPI.getlogindata(email.value.toString(), password.value.toString()).enqueue(object :
+        myAPI.getlogindata(body).enqueue(object :
             Callback<Login> {
             override fun onFailure(call: Call<Login>, t: Throwable) {
                 checkLogin = false
