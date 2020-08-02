@@ -1,7 +1,9 @@
 package com.example.sns.viewModel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.sns.base.BaseViewModel
+import com.example.sns.retrofit.Body
 import com.example.sns.retrofit.Dao
 import com.example.sns.retrofit.Register
 import com.example.sns.widget.SingleLiveEvent
@@ -15,6 +17,7 @@ class RegisterViewModel : BaseViewModel(){
     val name = MutableLiveData<String>()
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
+    val passwordCheck = MutableLiveData<String>()
 
     var checkLogin : Boolean? = null
 
@@ -23,14 +26,16 @@ class RegisterViewModel : BaseViewModel(){
 
     fun sendRegisterData(){
         myAPI = retrofit.create(Dao::class.java)
-        myAPI.sendregister(email.value.toString(), password.value.toString(), name.value.toString()).enqueue(object :
+        myAPI.sendregister(Body(name = name.value.toString(), email = email.value.toString(), password = password.value.toString(), passwordCheck = passwordCheck.value.toString()) ).enqueue(object :
             Callback<Register> {
             override fun onFailure(call: Call<Register>, t: Throwable) {
                 checkLogin = false
+                Log.d("ASD", "DDD");
             }
 
             override fun onResponse(call: Call<Register>, response: Response<Register>) {
                 checkLogin = true
+                Log.d("pk", "pk:"+response.body()?.user?.pk)
             }
         })
     }

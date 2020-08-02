@@ -6,15 +6,13 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface Dao {
-    @POST("/login")
+    @POST("/auth/login")
     fun getlogindata(
         @Body params: HashMap<String, String>
     ) : Call<Login>
 
-    @POST("/register")
+    @POST("/auth/registration")
     fun sendregister(
-        @Query("email") email: String,
-        @Query("password") password: String,
-        @Query("name") name: String
+        @Body body: com.example.sns.retrofit.Body
     ) :Call<Register>
 }

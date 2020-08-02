@@ -24,7 +24,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
     override fun observerViewModel() {
         with(viewModel){
-            btn.observe(this@LoginActivity, Observer {
+            loginBtn.observe(this@LoginActivity, Observer {
                 getlogindata()
                 if(checkLogin) {
                     Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
@@ -35,7 +35,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 }
             })
 
-            btn.observe(this@LoginActivity, Observer {
+            registerBtn.observe(this@LoginActivity, Observer {
                 startActivity(RegisterActivity::class.java)
             })
         }

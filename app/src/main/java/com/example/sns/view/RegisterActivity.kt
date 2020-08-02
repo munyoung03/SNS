@@ -1,5 +1,6 @@
 package com.example.sns.view
 
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.sns.R
@@ -21,17 +22,19 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
 
     override fun init() {  viewModel.retrofit = RetrofitClient.getInstance() }
 
+
     override fun observerViewModel() {
         with(viewModel){
             btn.observe(this@RegisterActivity, Observer {
                 sendRegisterData()
-                if(checkLogin == true) {
+                if (checkLogin == true) {
+                    Log.d("ASD", "ASD")
                     Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
                     startActivity(DashboardFragment::class.java)
-                }
-                else if(checkLogin == false){
+                } else if (checkLogin == false) {
                     Toast.makeText(applicationContext, "회원가입 실패", Toast.LENGTH_SHORT).show()
                 }
+                Log.d("ASD", "END")
             })
         }
     }

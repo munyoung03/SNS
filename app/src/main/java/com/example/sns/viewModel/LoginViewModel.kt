@@ -12,10 +12,12 @@ import retrofit2.Retrofit
 
 class LoginViewModel : BaseViewModel(){
 
-    val btn = SingleLiveEvent<Unit>()
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
     val body = HashMap<String, String>()
+
+    val registerBtn = SingleLiveEvent<Unit>()
+    val loginBtn = SingleLiveEvent<Unit>()
 
     var checkLogin : Boolean = false
 
@@ -30,19 +32,17 @@ class LoginViewModel : BaseViewModel(){
             override fun onFailure(call: Call<Login>, t: Throwable) {
                 checkLogin = false
             }
-
             override fun onResponse(call: Call<Login>, response: Response<Login>) {
                 checkLogin = true
             }
-
         })
     }
 
     fun r_btnClick(){
-        btn.call()
+        registerBtn.call()
     }
 
     fun l_btnClick(){
-        btn.call()
+        loginBtn.call()
     }
 }
