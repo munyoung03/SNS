@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.sns.base.BaseViewModel
 import com.example.sns.retrofit.Dao
 import com.example.sns.retrofit.Login
+import com.example.sns.retrofit.LoginBody
 import com.example.sns.widget.SingleLiveEvent
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,26 +15,25 @@ class LoginViewModel : BaseViewModel(){
 
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
-    val body = HashMap<String, String>()
+    val username = MutableLiveData<String>()
 
     val registerBtn = SingleLiveEvent<Unit>()
     val loginBtn = SingleLiveEvent<Unit>()
 
-    var checkLogin : Boolean = false
+    var checkLogin = MutableLiveData<Boolean>()
 
     lateinit var myAPI : Dao
     lateinit var retrofit: Retrofit
 
     fun getlogindata() {
-        body.put(email.value.toString(), password.value.toString())
         myAPI = retrofit.create(Dao::class.java)
-        myAPI.getlogindata(body).enqueue(object :
+        myAPI.getlogindata(LoginBody(username = username.value.toString(), email = email.value.toString(), password = password.value.toString())).enqueue(object :
             Callback<Login> {
             override fun onFailure(call: Call<Login>, t: Throwable) {
-                checkLogin = false
+                checkLogin.value = false
             }
             override fun onResponse(call: Call<Login>, response: Response<Login>) {
-                checkLogin = true
+                checkLogin.value = true
             }
         })
     }

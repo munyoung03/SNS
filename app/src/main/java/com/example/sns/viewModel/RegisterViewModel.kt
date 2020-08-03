@@ -19,22 +19,22 @@ class RegisterViewModel : BaseViewModel(){
     val password = MutableLiveData<String>()
     val passwordCheck = MutableLiveData<String>()
 
-    var checkLogin : Boolean? = null
+    var checkLogin = MutableLiveData<Boolean>()
 
     lateinit var myAPI : Dao
     lateinit var retrofit: Retrofit
 
     fun sendRegisterData(){
         myAPI = retrofit.create(Dao::class.java)
-        myAPI.sendregister(Body(name = name.value.toString(), email = email.value.toString(), password = password.value.toString(), passwordCheck = passwordCheck.value.toString()) ).enqueue(object :
+        myAPI.sendregister(Body(username = name.value.toString(), email = email.value.toString(), password1 = password.value.toString(), password2 = passwordCheck.value.toString()) ).enqueue(object :
             Callback<Register> {
             override fun onFailure(call: Call<Register>, t: Throwable) {
-                checkLogin = false
+                checkLogin.value = false
                 Log.d("ASD", "DDD");
             }
 
             override fun onResponse(call: Call<Register>, response: Response<Register>) {
-                checkLogin = true
+                checkLogin.value = true
                 Log.d("pk", "pk:"+response.body()?.user?.pk)
             }
         })

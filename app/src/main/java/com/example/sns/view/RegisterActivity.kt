@@ -27,14 +27,15 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
         with(viewModel){
             btn.observe(this@RegisterActivity, Observer {
                 sendRegisterData()
-                if (checkLogin == true) {
+            })
+            checkLogin.observe(this@RegisterActivity, Observer {
+                if (checkLogin.value == true) {
                     Log.d("ASD", "ASD")
                     Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
-                    startActivity(DashboardFragment::class.java)
-                } else if (checkLogin == false) {
+                    startActivity(MainActivity::class.java)
+                } else if (checkLogin.value == false) {
                     Toast.makeText(applicationContext, "회원가입 실패", Toast.LENGTH_SHORT).show()
                 }
-                Log.d("ASD", "END")
             })
         }
     }

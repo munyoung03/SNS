@@ -26,9 +26,12 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
         with(viewModel){
             loginBtn.observe(this@LoginActivity, Observer {
                 getlogindata()
-                if(checkLogin) {
+            })
+
+            checkLogin.observe(this@LoginActivity, Observer {
+                if(checkLogin.value == true) {
                     Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
-                    startActivity(DashboardFragment::class.java)
+                    startActivity(MainActivity::class.java)
                 }
                 else {
                     Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
