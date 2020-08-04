@@ -1,4 +1,4 @@
-package com.example.sns.view
+package com.example.sns.view.activity
 
 import android.util.Log
 import android.widget.Toast
@@ -7,7 +7,6 @@ import com.example.sns.R
 import com.example.sns.base.BaseActivity
 import com.example.sns.databinding.ActivityRegisterBinding
 import com.example.sns.retrofit.RetrofitClient
-import com.example.sns.ui.dashboard.DashboardFragment
 import com.example.sns.viewModel.RegisterViewModel
 import com.example.sns.widget.startActivity
 import org.koin.androidx.viewmodel.ext.android.getViewModel

@@ -1,4 +1,4 @@
-package com.example.sns.view
+package com.example.sns.view.activity
 
 import android.os.Bundle
 import android.util.Log
@@ -21,9 +21,9 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.navigation_home,
-            R.id.navigation_dashboard,
-            R.id.navigation_notifications
+            R.id.navigation_map,
+            R.id.navigation_mainpage,
+            R.id.navigation_mypage
 
         ))
 
