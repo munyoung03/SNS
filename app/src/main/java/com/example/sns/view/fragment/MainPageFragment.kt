@@ -9,24 +9,28 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.sns.R
+import com.example.sns.base.BaseFragment
+import com.example.sns.databinding.FragmentMainpageBinding
+import com.example.sns.databinding.FragmentMypageBinding
 import com.example.sns.viewModel.MainPageViewModel
+import com.example.sns.viewModel.MyPageViewModel
+import com.example.sns.widget.MyApplication
+import kotlinx.android.synthetic.main.fragment_mainpage.*
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
-class MainPageFragment : Fragment() {
+class MainPageFragment : BaseFragment<FragmentMainpageBinding, MainPageViewModel>() {
 
-    private lateinit var mainPageViewModel: MainPageViewModel
+    override val viewModel: MainPageViewModel
+        get() = getViewModel()
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        mainPageViewModel =
-                ViewModelProviders.of(this).get(MainPageViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_mainpage, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        mainPageViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+    override val layoutRes: Int
+        get() = R.layout.fragment_mainpage
+
+    override fun init() {
+
+    }
+
+    override fun observerViewModel() {
+
     }
 }

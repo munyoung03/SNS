@@ -1,13 +1,8 @@
 package com.example.sns.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 
-class MyPageViewModel : ViewModel() {
+import com.example.sns.base.BaseViewModel
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
-    }
-    val text: LiveData<String> = _text
+class MyPageViewModel : BaseViewModel() {
+
 }

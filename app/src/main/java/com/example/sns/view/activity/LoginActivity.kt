@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseActivity
+import com.example.sns.base.BaseViewModel
 import com.example.sns.databinding.ActivityLoginBinding
 import com.example.sns.retrofit.RetrofitClient
 import com.example.sns.viewModel.LoginViewModel

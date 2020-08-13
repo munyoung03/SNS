@@ -9,7 +9,7 @@ interface Dao {
     @POST("/auth/login/")
     fun getlogindata(
         @Body loginBody: LoginBody
-    ) : Call<Login>
+    ) : Call<Register>
 
     @POST("/auth/registration/")
     fun sendregister(
