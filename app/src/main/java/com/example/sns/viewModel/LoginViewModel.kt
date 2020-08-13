@@ -3,8 +3,9 @@ package com.example.sns.viewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.sns.base.BaseViewModel
 import com.example.sns.retrofit.Dao
-import com.example.sns.retrofit.Login
 import com.example.sns.retrofit.LoginBody
+import com.example.sns.retrofit.Register
+import com.example.sns.widget.MyApplication
 import com.example.sns.widget.SingleLiveEvent
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,12 +29,15 @@ class LoginViewModel : BaseViewModel(){
     fun getlogindata() {
         myAPI = retrofit.create(Dao::class.java)
         myAPI.getlogindata(LoginBody(username = username.value.toString(), email = email.value.toString(), password = password.value.toString())).enqueue(object :
-            Callback<Login> {
-            override fun onFailure(call: Call<Login>, t: Throwable) {
+            Callback<Register> {
+            override fun onFailure(call: Call<Register>, t: Throwable) {
                 checkLogin.value = false
             }
-            override fun onResponse(call: Call<Login>, response: Response<Login>) {
+            override fun onResponse(call: Call<Register>, response: Response<Register>) {
                 checkLogin.value = true
+                MyApplication.prefs.setUsername("name", response.body()?.user?.username.toString())
+                MyApplication.prefs.setEmail("email", response.body()?.user?.email.toString())
+                MyApplication.prefs.setToken("token", response.body()?.token.toString())
             }
         })
     }
