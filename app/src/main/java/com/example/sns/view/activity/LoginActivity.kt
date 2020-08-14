@@ -10,6 +10,7 @@ import com.example.sns.retrofit.RetrofitClient
 import com.example.sns.viewModel.LoginViewModel
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.startActivity
+import com.example.sns.widget.toast
 import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
@@ -36,11 +37,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                     {
                         MyApplication.prefs.setCheckLogin("checklogin", true)
                     }
-                    Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
+                    toast("로그인 성공")
                     startActivity(MainActivity::class.java)
                 }
                 else {
-                    Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
+                    toast("로그인 실패")
                 }
             })
 
