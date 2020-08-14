@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.example.sns.BR
-import com.example.sns.widget.lightStatusBar
+import com.example.sns.widget.extension.lightStatusBar
 
 abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity(){
     protected lateinit var binding : VB

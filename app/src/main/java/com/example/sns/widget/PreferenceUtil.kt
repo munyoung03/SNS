@@ -12,7 +12,7 @@ class PreferenceUtil(context: Context) {
         return prefs.getString(key, defValue).toString()
     }
 
-    fun setEmail(key: String, str: String)
+    fun setEmail(key: String, str: String?)
     {
         prefs.edit().putString(key, str).apply()
     }
@@ -22,7 +22,7 @@ class PreferenceUtil(context: Context) {
         return prefs.getString(key, defValue).toString()
     }
 
-    fun setToken(key: String, str: String)
+    fun setToken(key: String, str: String?)
     {
         prefs.edit().putString(key, str).apply()
     }
@@ -32,7 +32,7 @@ class PreferenceUtil(context: Context) {
         return prefs.getString(key, defValue).toString()
     }
 
-    fun setUsername(key: String, str: String)
+    fun setUsername(key: String, str: String?)
     {
         prefs.edit().putString(key, str).apply()
     }

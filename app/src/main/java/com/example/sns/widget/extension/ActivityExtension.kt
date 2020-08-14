@@ -1,4 +1,4 @@
-package com.example.sns.widget
+package com.example.sns.widget.extension
 
 import android.content.Intent
 import android.view.View

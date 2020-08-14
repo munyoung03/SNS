@@ -8,7 +8,7 @@ import com.example.sns.base.BaseActivity
 import com.example.sns.databinding.ActivityRegisterBinding
 import com.example.sns.retrofit.RetrofitClient
 import com.example.sns.viewModel.RegisterViewModel
-import com.example.sns.widget.startActivity
+import com.example.sns.widget.extension.startActivity
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel>() {

@@ -1,8 +1,10 @@
 package com.example.sns.view.fragment
 
+import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentMypageBinding
+import com.example.sns.view.activity.LoginActivity
 import com.example.sns.viewModel.MyPageViewModel
 import com.example.sns.widget.MyApplication
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -10,7 +12,7 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
 class MyPageFragment : BaseFragment<FragmentMypageBinding, MyPageViewModel>() {
 
     override val viewModel: MyPageViewModel
-        get() = getViewModel()
+        get() = getViewModel(MyPageViewModel::class)
 
     override val layoutRes: Int
         get() = R.layout.fragment_mypage
@@ -21,6 +23,10 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding, MyPageViewModel>() {
     }
 
     override fun observerViewModel() {
-
+        with(viewModel){
+            logoutBtn.observe(this@MyPageFragment, Observer {
+                setData()
+            })
+        }
     }
 }

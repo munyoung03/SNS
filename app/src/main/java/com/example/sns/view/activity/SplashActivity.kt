@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.sns.R
 import com.example.sns.widget.MyApplication
-import com.example.sns.widget.startActivity
-import com.example.sns.widget.toast
+import com.example.sns.widget.extension.startActivity
+import com.example.sns.widget.extension.toast
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

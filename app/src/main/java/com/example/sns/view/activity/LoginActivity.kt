@@ -1,16 +1,14 @@
 package com.example.sns.view.activity
 
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseActivity
-import com.example.sns.base.BaseViewModel
 import com.example.sns.databinding.ActivityLoginBinding
 import com.example.sns.retrofit.RetrofitClient
 import com.example.sns.viewModel.LoginViewModel
 import com.example.sns.widget.MyApplication
-import com.example.sns.widget.startActivity
-import com.example.sns.widget.toast
+import com.example.sns.widget.extension.startActivity
+import com.example.sns.widget.extension.toast
 import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
