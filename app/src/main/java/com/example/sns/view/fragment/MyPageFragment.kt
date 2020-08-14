@@ -7,6 +7,7 @@ import com.example.sns.databinding.FragmentMypageBinding
 import com.example.sns.view.activity.LoginActivity
 import com.example.sns.viewModel.MyPageViewModel
 import com.example.sns.widget.MyApplication
+import com.example.sns.widget.extension.startActivity
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class MyPageFragment : BaseFragment<FragmentMypageBinding, MyPageViewModel>() {
@@ -26,6 +27,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding, MyPageViewModel>() {
         with(viewModel){
             logoutBtn.observe(this@MyPageFragment, Observer {
                 setData()
+                startActivity(LoginActivity::class.java)
             })
         }
     }
