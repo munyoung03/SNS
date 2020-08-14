@@ -37,6 +37,16 @@ class PreferenceUtil(context: Context) {
         prefs.edit().putString(key, str).apply()
     }
 
+    fun setCheckLogin(key: String, bol: Boolean)
+    {
+        prefs.edit().putBoolean(key, bol).apply()
+    }
+
+    fun getCheckLogin(key: String, defValue: Boolean): Boolean
+    {
+        return prefs.getBoolean(key, defValue)
+    }
+
 
 
 }

@@ -8,7 +8,9 @@ import com.example.sns.base.BaseViewModel
 import com.example.sns.databinding.ActivityLoginBinding
 import com.example.sns.retrofit.RetrofitClient
 import com.example.sns.viewModel.LoginViewModel
+import com.example.sns.widget.MyApplication
 import com.example.sns.widget.startActivity
+import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
@@ -30,6 +32,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
             checkLogin.observe(this@LoginActivity, Observer {
                 if(checkLogin.value == true) {
+                    if(check_login.isChecked)
+                    {
+                        MyApplication.prefs.setCheckLogin("checklogin", true)
+                    }
                     Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
                     startActivity(MainActivity::class.java)
                 }

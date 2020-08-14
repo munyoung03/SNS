@@ -71,13 +71,13 @@
             android:id="@+id/login_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="16dp"
             android:onClick="@{()->viewModel.l_btnClick()}"
             android:text="로그인"
             app:layout_constraintEnd_toEndOf="@+id/password"
             app:layout_constraintHorizontal_bias="0.504"
             app:layout_constraintStart_toStartOf="@+id/password"
-            app:layout_constraintTop_toBottomOf="@+id/password" />
+            app:layout_constraintTop_toBottomOf="@+id/check_login" />
 
         <Button
             android:id="@+id/l_register_btn"
@@ -92,6 +92,17 @@
             app:layout_constraintStart_toStartOf="@+id/login_btn"
             app:layout_constraintTop_toBottomOf="@+id/login_btn"
             app:layout_constraintVertical_bias="0.119" />
+
+        <CheckBox
+            android:id="@+id/check_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="자동로그인"
+            app:layout_constraintEnd_toEndOf="@+id/password"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/password"
+            app:layout_constraintTop_toBottomOf="@+id/password" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
