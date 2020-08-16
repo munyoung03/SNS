@@ -50,9 +50,7 @@ class SplashActivity : AppCompatActivity() {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     fun checkPermission() {
-        Log.d("히힣", "1")
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-        Log.d("히힣", "2")
         for (permission in permission_list) {
             val chk = checkCallingOrSelfPermission(permission!!)
             if (chk == PackageManager.PERMISSION_DENIED) {
