@@ -1,5 +1,7 @@
 package com.example.sns.view.fragment
 
+import android.content.Intent
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
@@ -9,6 +11,7 @@ import com.example.sns.viewModel.MyPageViewModel
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.startActivity
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+
 
 class MyPageFragment : BaseFragment<FragmentMypageBinding, MyPageViewModel>() {
 
@@ -29,6 +32,10 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding, MyPageViewModel>() {
                 setData()
                 startActivity(LoginActivity::class.java)
             })
+            image.observe(this@MyPageFragment, Observer {
+
+            })
         }
     }
+
 }

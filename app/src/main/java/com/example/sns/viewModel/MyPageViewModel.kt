@@ -7,6 +7,7 @@ import com.example.sns.widget.SingleLiveEvent
 class MyPageViewModel : BaseViewModel() {
 
     val logoutBtn = SingleLiveEvent<Unit>()
+    val image = SingleLiveEvent<Unit>()
 
     fun setData(){
         MyApplication.prefs.setCheckLogin("checklogin", false)
@@ -17,5 +18,9 @@ class MyPageViewModel : BaseViewModel() {
 
     fun logoutBtnClick(){
         logoutBtn.call()
+    }
+
+    fun imageClick(){
+        image.call()
     }
 }

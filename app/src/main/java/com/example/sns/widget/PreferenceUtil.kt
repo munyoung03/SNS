@@ -47,6 +47,15 @@ class PreferenceUtil(context: Context) {
         return prefs.getBoolean(key, defValue)
     }
 
+    fun setCheckPermission(key: String, bol: Boolean)
+    {
+        prefs.edit().putBoolean(key, bol).apply()
+    }
+
+    fun getCheckPermission(key: String, defValue: Boolean): Boolean
+    {
+        return prefs.getBoolean(key, defValue)
+    }
 
 
 }

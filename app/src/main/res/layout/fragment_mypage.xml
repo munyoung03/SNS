@@ -19,6 +19,7 @@
             android:layout_marginStart="50dp"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="50dp"
+            android:onClick="@{()->viewModel.imageClick()}"
             android:src="@android:drawable/ic_menu_myplaces"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
