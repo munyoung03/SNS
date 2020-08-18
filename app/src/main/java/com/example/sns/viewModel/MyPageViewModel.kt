@@ -23,4 +23,6 @@ class MyPageViewModel : BaseViewModel() {
     fun imageClick(){
         image.call()
     }
+
+
 }
