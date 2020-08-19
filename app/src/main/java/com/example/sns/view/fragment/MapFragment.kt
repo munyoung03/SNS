@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Transformations.map
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentMapBinding
 import com.example.sns.viewModel.MapViewModel
@@ -12,13 +11,10 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-
 import com.example.sns.R
-import kotlinx.android.synthetic.main.fragment_map.view.*
 
 class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReadyCallback {
 
-    private lateinit var mView: MapView
     private lateinit var mMap: GoogleMap
 
     override val viewModel: MapViewModel
@@ -56,7 +52,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val latLng = LatLng(50.0, 50.0)
+        val latLng = LatLng(33.0, 124.0)
         val marker = MarkerOptions().position(latLng)
         mMap.addMarker(marker)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
