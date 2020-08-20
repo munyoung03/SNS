@@ -21,7 +21,9 @@ class SplashActivity : AppCompatActivity() {
 
     var permission_list = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -65,16 +67,13 @@ class SplashActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("히힣", "3")
         if (requestCode == 0) {
-            Log.d("히힣", "4")
             for (i in grantResults.indices) {
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     login()
                     MyApplication.prefs.setCheckPermission("permission", true)
-                    Log.d("히힣", "5")
                 } else {
-                    Toast.makeText(applicationContext, "앱권한설정하세요", Toast.LENGTH_LONG).show()
+                    toast("퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요")
                     finish()
                 }
             }

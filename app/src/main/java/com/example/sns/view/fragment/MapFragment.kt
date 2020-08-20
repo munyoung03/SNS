@@ -1,17 +1,32 @@
 package com.example.sns.view.fragment
 
+import android.app.AlertDialog
+import android.content.Context.LOCATION_SERVICE
+import android.content.DialogInterface
+import android.content.Intent
+import android.location.Address
+import android.location.Geocoder
+import android.location.LocationManager
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
+import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentMapBinding
 import com.example.sns.viewModel.MapViewModel
+import com.example.sns.widget.extension.startActivity
+import com.example.sns.widget.extension.toast
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import com.example.sns.R
+import java.io.IOException
+import java.util.*
+
 
 class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReadyCallback {
 
@@ -24,7 +39,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         get() = R.layout.fragment_map
 
     override fun init() {
-
+        showDialogForLocationServiceSetting()
     }
 
     override fun onCreateView(
@@ -57,6 +72,54 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         mMap.addMarker(marker)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
 
+    }
+
+    private fun showDialogForLocationServiceSetting() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
+        builder.setTitle("위치 서비스 비활성화")
+        builder.setMessage(
+            """
+                앱을 사용하기 위해서는 위치 서비스가 필요합니다.
+                위치 설정을 수정하실래요?
+                """.trimIndent()
+        )
+        builder.setCancelable(true)
+        builder.setPositiveButton("설정", DialogInterface.OnClickListener { dialog, id ->
+            val callGPSSettingIntent =
+                Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(callGPSSettingIntent)
+        })
+        builder.setNegativeButton("취소",
+            DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+        builder.create().show()
+    }
+
+
+    fun getCurrentAddress(latitude: Double, longitude: Double): String? {
+
+        //지오코더... GPS를 주소로 변환
+        val geocoder = Geocoder(activity, Locale.getDefault())
+        val addresses: List<Address>
+        addresses = try {
+            geocoder.getFromLocation(
+                latitude,
+                longitude,
+                7
+            )
+        } catch (ioException: IOException) {
+            //네트워크 문제
+            toast("지오코더 서비스 사용불가")
+            return "지오코더 서비스 사용불가"
+        } catch (illegalArgumentException: IllegalArgumentException) {
+            toast("잘못된 GPS 좌표")
+            return "잘못된 GPS 좌표"
+        }
+        if (addresses == null || addresses.size == 0) {
+            toast("주소 미발견")
+            return "주소 미발견"
+        }
+        val address: Address = addresses[0]
+        return address.getAddressLine(0).toString().toString() + "\n"
     }
 
 }

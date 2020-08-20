@@ -11,4 +11,4 @@ fun Fragment.startActivity(moveActivity: Class<*>) {
 
 fun Fragment.toast(message: String?) {
     Toast.makeText(context!!.applicationContext, message, Toast.LENGTH_SHORT).show()
-}
+}                
