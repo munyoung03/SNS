@@ -1,15 +1,19 @@
 package com.example.sns.view.fragment
 
 import android.app.AlertDialog
+import android.content.Context.LOCATION_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentMapBinding
@@ -27,7 +31,7 @@ import java.util.*
 
 class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReadyCallback {
 
-    private var gpsTracker: GpsTracker? = null
+    private lateinit var gpsTracker: GpsTracker
     private lateinit var mMap: GoogleMap
 
     override val viewModel: MapViewModel
@@ -37,6 +41,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         get() = R.layout.fragment_map
 
     override fun init() {
+        if(!checkLocationServicesStatus())
         showDialogForLocationServiceSetting()
     }
 
@@ -58,6 +63,8 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
         mapView.getMapAsync(this)
 
+        gpsTracker = GpsTracker(this);
+        gpsTracker.getLocation(requireContext())
         return view;
     }
     override fun observerViewModel() {
@@ -65,19 +72,21 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        val latLng = LatLng(35.0, 128.0)
-        val marker = MarkerOptions().position(latLng)
-        mMap.addMarker(marker)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
 
-        gpsTracker = GpsTracker(this)
 
         val latitude = gpsTracker!!.getLatitude()
         val longitude = gpsTracker!!.getLongitude()
 
+        Log.d("TAG", "위도 : $latitude, 경도 : $longitude")
+
         val address = getCurrentAddress(latitude, longitude)
-        address_text.setText(address)
+        address_text.text = address
+
+        mMap = googleMap
+        val latLng = LatLng(latitude, longitude)
+        val marker = MarkerOptions().position(latLng)
+        mMap.addMarker(marker)
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
     }
 
     private fun showDialogForLocationServiceSetting() {
@@ -125,7 +134,14 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
             return "주소 미발견"
         }
         val address: Address = addresses[0]
+
         return address.getAddressLine(0).toString().toString() + "\n"
+    }
+
+    fun checkLocationServicesStatus(): Boolean {
+        val locationManager = activity?.getSystemService(LOCATION_SERVICE) as LocationManager?
+        return (locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
     }
 
 }

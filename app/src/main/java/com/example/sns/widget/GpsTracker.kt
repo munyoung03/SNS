@@ -24,20 +24,17 @@ class GpsTracker(mapFragment: MapFragment) : Service(), LocationListener {
     private val MIN_TIME_BW_UPDATES = 1000 * 60 * 1.toLong()
     protected var locationManager: LocationManager? = null
 
-
-    fun GpsTracker(context: Context?) {
-        mContext = context
-        getLocation()
-    }
-
-
-     fun getLocation(): Location? {
+     fun getLocation(context: Context): Location? {
+         mContext = context
+         Log.d("TAG","NOT ENABLED")
         try {
+            Log.d("TAG","NOT ENABLED")
             locationManager = mContext?.getSystemService(LOCATION_SERVICE) as LocationManager?
             val isGPSEnabled = locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
             val isNetworkEnabled =
                 locationManager!!.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
             if (!isGPSEnabled && !isNetworkEnabled) {
+                Log.d("TAG","NOT ENABLED")
             } else {
                 val hasFineLocationPermission = ContextCompat.checkSelfPermission(
                     mContext!!,
@@ -47,11 +44,15 @@ class GpsTracker(mapFragment: MapFragment) : Service(), LocationListener {
                     mContext!!,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION
                 )
+                print(hasFineLocationPermission)
+                print(hasCoarseLocationPermission)
                 if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
                     hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED
                 ) {
+                    Log.d("TAG","GRANTED")
                 } else return null
                 if (isNetworkEnabled) {
+                    Log.d("TAG","ENABLED NET")
                     locationManager!!.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER,
                         MIN_TIME_BW_UPDATES,
@@ -59,16 +60,20 @@ class GpsTracker(mapFragment: MapFragment) : Service(), LocationListener {
                         this
                     )
                     if (locationManager != null) {
+                        Log.d("TAG","NOT NULL")
                         location =
                             locationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                         if (location != null) {
                             latitude = location!!.latitude
                             longitude = location!!.longitude
+                            Log.d("TAG", "경도1 : $latitude, 위도1 : $longitude")
                         }
                     }
                 }
                 if (isGPSEnabled) {
+                    Log.d("TAG","ENABLED GPS")
                     if (location == null) {
+                        Log.d("TAG","NOT NULL LOC")
                         locationManager!!.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
                             MIN_TIME_BW_UPDATES,
@@ -76,11 +81,14 @@ class GpsTracker(mapFragment: MapFragment) : Service(), LocationListener {
                             this
                         )
                         if (locationManager != null) {
+
+                            Log.d("TAG","NOT NULL MANAGER")
                             location =
                                 locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                             if (location != null) {
                                 latitude = location!!.latitude
                                 longitude = location!!.longitude
+                                Log.d("TAG", "경도2 : $latitude, 위도2 : $longitude")
                             }
                         }
                     }
