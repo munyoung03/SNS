@@ -13,7 +13,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentMapBinding
@@ -22,6 +21,7 @@ import com.example.sns.widget.GpsTracker
 import com.example.sns.widget.extension.toast
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_map.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -33,6 +33,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
     private lateinit var gpsTracker: GpsTracker
     private lateinit var mMap: GoogleMap
+    private lateinit var marker: MarkerOptions
 
     override val viewModel: MapViewModel
         get() = getViewModel()
@@ -84,8 +85,13 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
         mMap = googleMap
         val latLng = LatLng(latitude, longitude)
-        val marker = MarkerOptions().position(latLng)
-        mMap.addMarker(marker)
+
+        //----------------------------------------------
+        marker = MarkerOptions().position(latLng)
+        val m = mMap.addMarker(marker)
+        m.remove()
+        //----------------------------------------------
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
     }
 
