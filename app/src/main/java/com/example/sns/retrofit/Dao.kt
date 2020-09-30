@@ -1,18 +1,18 @@
 package com.example.sns.retrofit
 
+import com.example.sns.model.*
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface Dao {
     @POST("/auth/login/")
-    fun getlogindata(
+    fun login(
         @Body loginBody: LoginBody
-    ) : Call<Register>
+    ) : Call<LoginData>
 
     @POST("/auth/registration/")
-    fun sendregister(
-        @Body body: com.example.sns.retrofit.Body
-    ) :Call<Register>
+    fun register(
+        @Body registerBody : RegisterBody
+    ) :Call<RegisterData>
 }

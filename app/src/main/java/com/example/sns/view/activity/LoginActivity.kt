@@ -26,11 +26,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
     override fun observerViewModel() {
         with(viewModel){
             loginBtn.observe(this@LoginActivity, Observer {
-                getlogindata()
+                login()
             })
 
-            checkLogin.observe(this@LoginActivity, Observer {
-                if(checkLogin.value == true) {
+            status.observe(this@LoginActivity, Observer {
+                if(status.value == "200") {
                     if(check_login.isChecked)
                     {
                         MyApplication.prefs.setCheckLogin("checklogin", true)

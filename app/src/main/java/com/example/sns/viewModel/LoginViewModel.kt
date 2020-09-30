@@ -3,8 +3,9 @@ package com.example.sns.viewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.sns.base.BaseViewModel
 import com.example.sns.retrofit.Dao
-import com.example.sns.retrofit.LoginBody
-import com.example.sns.retrofit.Register
+import com.example.sns.model.LoginBody
+import com.example.sns.model.LoginData
+import com.example.sns.model.RegisterBody
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.SingleLiveEvent
 import retrofit2.Call
@@ -21,22 +22,20 @@ class LoginViewModel : BaseViewModel(){
     val registerBtn = SingleLiveEvent<Unit>()
     val loginBtn = SingleLiveEvent<Unit>()
 
-    var checkLogin = MutableLiveData<Boolean>()
+    var status = MutableLiveData<String>()
 
     lateinit var myAPI : Dao
     lateinit var retrofit: Retrofit
 
-    fun getlogindata() {
+    fun login() {
         myAPI = retrofit.create(Dao::class.java)
-        myAPI.getlogindata(LoginBody(username = username.value.toString(), email = email.value.toString(), password = password.value.toString())).enqueue(object :
-            Callback<Register> {
-            override fun onFailure(call: Call<Register>, t: Throwable) {
-                checkLogin.value = false
+        myAPI.login(LoginBody(email = email.value.toString(), password = password.value.toString())).enqueue(object :
+            Callback<LoginData> {
+            override fun onFailure(call: Call<LoginData>, t: Throwable) {
+                status.value = "400"
             }
-            override fun onResponse(call: Call<Register>, response: Response<Register>) {
-                checkLogin.value = true
-                MyApplication.prefs.setUsername("name", response.body()?.user?.username.toString())
-                MyApplication.prefs.setEmail("email", response.body()?.user?.email.toString())
+            override fun onResponse(call: Call<LoginData>, response: Response<LoginData>) {
+                status.value = response.code().toString()
                 MyApplication.prefs.setToken("token", response.body()?.token.toString())
             }
         })

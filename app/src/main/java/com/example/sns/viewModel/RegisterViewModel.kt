@@ -3,9 +3,9 @@ package com.example.sns.viewModel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.sns.base.BaseViewModel
-import com.example.sns.retrofit.Body
+import com.example.sns.model.Body
 import com.example.sns.retrofit.Dao
-import com.example.sns.retrofit.Register
+import com.example.sns.model.Register
 import com.example.sns.widget.SingleLiveEvent
 import retrofit2.Call
 import retrofit2.Callback
