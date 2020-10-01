@@ -25,14 +25,13 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
     override fun observerViewModel() {
         with(viewModel){
             btn.observe(this@RegisterActivity, Observer {
-                sendRegisterData()
+                register()
             })
-            checkLogin.observe(this@RegisterActivity, Observer {
-                if (checkLogin.value == true) {
-                    Log.d("ASD", "ASD")
+            status.observe(this@RegisterActivity, Observer {
+                if (status.value == "200") {
                     Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
-                    startActivity(MainActivity::class.java)
-                } else if (checkLogin.value == false) {
+                    startActivity(LoginActivity::class.java)
+                } else {
                     Toast.makeText(applicationContext, "회원가입 실패", Toast.LENGTH_SHORT).show()
                 }
             })
