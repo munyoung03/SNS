@@ -9,6 +9,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -81,7 +82,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
         Log.d("TAG", "위도 : $latitude, 경도 : $longitude")
 
-        var address = getCurrentAddress(latitude, longitude)
+        var address = viewModel.getCurrentAddress(latitude, longitude)
         address_text.text = address
 
         mMap = googleMap
@@ -96,14 +97,10 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
         //카메라 이동시 마커 따라옴
         mMap.setOnCameraMoveListener {
-            address = getCurrentAddress(mMap.cameraPosition.target.latitude, mMap.cameraPosition.target.longitude)
-            address_text.text = address
-
-            Log.d("TAG","cameraPositionLati : "+ mMap.cameraPosition.target.latitude)
-            Log.d("TAG","cameraPositionLong : "+ mMap.cameraPosition.target.longitude)
-            m.remove()
-            marker = MarkerOptions().position((LatLng(mMap.cameraPosition.target.latitude, mMap.cameraPosition.target.longitude)))
-            m = mMap.addMarker(marker)
+            address = viewModel.getCurrentAddress(
+                mMap.cameraPosition.target.latitude,
+                mMap.cameraPosition.target.longitude)
+            m.position = mMap.cameraPosition.target
         }
 
         //마커 드래그 후 카메라 이동
@@ -124,7 +121,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 //        })
     }
 
-    private fun showDialogForLocationServiceSetting() {
+     fun showDialogForLocationServiceSetting() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
         builder.setTitle("위치 서비스 비활성화")
         builder.setMessage(
@@ -145,33 +142,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
     }
 
 
-    fun getCurrentAddress(latitude: Double, longitude: Double): String? {
 
-        //지오코더... GPS를 주소로 변환
-        val geocoder = Geocoder(activity, Locale.getDefault())
-        val addresses: List<Address>
-        addresses = try {
-            geocoder.getFromLocation(
-                latitude,
-                longitude,
-                7
-            )
-        } catch (ioException: IOException) {
-            //네트워크 문제
-            toast("지오코더 서비스 사용불가")
-            return "지오코더 서비스 사용불가"
-        } catch (illegalArgumentException: IllegalArgumentException) {
-            toast("잘못된 GPS 좌표")
-            return "잘못된 GPS 좌표"
-        }
-        if (addresses == null || addresses.size == 0) {
-            toast("주소 미발견")
-            return "주소 미발견"
-        }
-        val address: Address = addresses[0]
-
-        return address.getAddressLine(0).toString().toString() + "\n"
-    }
 
     fun checkLocationServicesStatus(): Boolean {
         val locationManager = activity?.getSystemService(LOCATION_SERVICE) as LocationManager?
