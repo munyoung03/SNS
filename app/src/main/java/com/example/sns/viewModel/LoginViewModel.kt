@@ -1,5 +1,6 @@
 package com.example.sns.viewModel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.sns.base.BaseViewModel
 import com.example.sns.retrofit.Dao
@@ -36,6 +37,8 @@ class LoginViewModel : BaseViewModel(){
             }
             override fun onResponse(call: Call<LoginData>, response: Response<LoginData>) {
                 status.value = response.code().toString()
+                Log.d("TAG", "메시지 : ${response.message()}")
+                Log.d("TAG","이유 : ${response.errorBody()?.string().toString()}")
                 MyApplication.prefs.setToken("token", response.body()?.token.toString())
             }
         })

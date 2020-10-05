@@ -1,5 +1,6 @@
 package com.example.sns.view.activity
 
+import android.util.Log
 import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseActivity
@@ -39,6 +40,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                     startActivity(MainActivity::class.java)
                 }
                 else {
+                    Log.d("TAG", "사유 : ${status.value}")
                     toast("로그인 실패")
                 }
             })
