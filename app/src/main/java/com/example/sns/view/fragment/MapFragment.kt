@@ -1,6 +1,7 @@
 package com.example.sns.view.fragment
 
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Context.LOCATION_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
@@ -66,7 +67,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
         gpsTracker = GpsTracker(this);
         gpsTracker.getLocation(requireContext())
-        return view;
+        return view
     }
     override fun observerViewModel() {
 
@@ -86,13 +87,29 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         mMap = googleMap
         val latLng = LatLng(latitude, longitude)
 
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
+
         //----------------------------------------------
-        marker = MarkerOptions().position(latLng)
-        val m = mMap.addMarker(marker)
-        m.remove()
+        marker = MarkerOptions().position(latLng).draggable(true)
+        mMap.addMarker(marker)
         //----------------------------------------------
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
+        mMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
+            override fun onMarkerDragStart(arg0: Marker) {
+
+            }
+
+            override fun onMarkerDragEnd(arg0: Marker) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(arg0.position, 17f))
+                val message = arg0.position.latitude.toString() + "" + arg0.position.longitude.toString()
+                Log.d(TAG + "_END", message)
+            }
+
+            override fun onMarkerDrag(arg0: Marker?) {
+                val message = arg0!!.position.latitude.toString() + "" + arg0.position.longitude.toString()
+                Log.d(TAG + "_DRAG", message)
+            }
+        })
     }
 
     private fun showDialogForLocationServiceSetting() {
