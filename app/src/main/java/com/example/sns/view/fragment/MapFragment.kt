@@ -76,12 +76,12 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
     override fun onMapReady(googleMap: GoogleMap) {
 
 
-        val latitude = gpsTracker!!.getLatitude()
-        val longitude = gpsTracker!!.getLongitude()
+        val latitude = gpsTracker.getLatitude()
+        val longitude = gpsTracker.getLongitude()
 
         Log.d("TAG", "위도 : $latitude, 경도 : $longitude")
 
-        val address = getCurrentAddress(latitude, longitude)
+        var address = getCurrentAddress(latitude, longitude)
         address_text.text = address
 
         mMap = googleMap
@@ -91,25 +91,37 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
         //----------------------------------------------
         marker = MarkerOptions().position(latLng).draggable(true)
-        mMap.addMarker(marker)
+        var m = mMap.addMarker(marker)
         //----------------------------------------------
 
-        mMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
-            override fun onMarkerDragStart(arg0: Marker) {
+        //카메라 이동시 마커 따라옴
+        mMap.setOnCameraMoveListener {
+            address = getCurrentAddress(mMap.cameraPosition.target.latitude, mMap.cameraPosition.target.longitude)
+            address_text.text = address
 
-            }
+            Log.d("TAG","cameraPositionLati : "+ mMap.cameraPosition.target.latitude)
+            Log.d("TAG","cameraPositionLong : "+ mMap.cameraPosition.target.longitude)
+            m.remove()
+            marker = MarkerOptions().position((LatLng(mMap.cameraPosition.target.latitude, mMap.cameraPosition.target.longitude)))
+            m = mMap.addMarker(marker)
+        }
 
-            override fun onMarkerDragEnd(arg0: Marker) {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(arg0.position, 17f))
-                val message = arg0.position.latitude.toString() + "" + arg0.position.longitude.toString()
-                Log.d(TAG + "_END", message)
-            }
-
-            override fun onMarkerDrag(arg0: Marker?) {
-                val message = arg0!!.position.latitude.toString() + "" + arg0.position.longitude.toString()
-                Log.d(TAG + "_DRAG", message)
-            }
-        })
+        //마커 드래그 후 카메라 이동
+//        mMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
+//            override fun onMarkerDragStart(arg0: Marker) {
+//
+//            }
+//
+//            override fun onMarkerDragEnd(arg0: Marker) {
+//                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(arg0.position, 17f))
+//
+//                address = getCurrentAddress(arg0.position.latitude, arg0.position.longitude)
+//                address_text.text = address
+//            }
+//
+//            override fun onMarkerDrag(arg0: Marker?) {
+//            }
+//        })
     }
 
     private fun showDialogForLocationServiceSetting() {
