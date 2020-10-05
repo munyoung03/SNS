@@ -1,8 +1,10 @@
 package com.example.sns.viewModel
 
 import android.app.Application
+import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -37,8 +39,13 @@ class MapViewModel(private val application : Application) : BaseViewModel() {
         }
         val address: Address = addresses[0]
 
-        return address.getAddressLine(0).toString().toString() + "\n"
+        return address.getAddressLine(0).toString() + "\n"
     }
 
+    fun checkLocationServicesStatus(): Boolean {
+        val locationManager = application.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+        return (locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+    }
 
 }

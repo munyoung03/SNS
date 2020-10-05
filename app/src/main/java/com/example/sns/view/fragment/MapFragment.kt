@@ -44,7 +44,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         get() = R.layout.fragment_map
 
     override fun init() {
-        if(!checkLocationServicesStatus())
+        if(!viewModel.checkLocationServicesStatus())
         showDialogForLocationServiceSetting()
     }
 
@@ -70,12 +70,12 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         gpsTracker.getLocation(requireContext())
         return view
     }
+
     override fun observerViewModel() {
 
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-
 
         val latitude = gpsTracker.getLatitude()
         val longitude = gpsTracker.getLongitude()
@@ -92,15 +92,18 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
         //----------------------------------------------
         marker = MarkerOptions().position(latLng).draggable(true)
-        var m = mMap.addMarker(marker)
+        val m = mMap.addMarker(marker)
         //----------------------------------------------
 
         //카메라 이동시 마커 따라옴
         mMap.setOnCameraMoveListener {
+            m.position = mMap.cameraPosition.target
+
             address = viewModel.getCurrentAddress(
                 mMap.cameraPosition.target.latitude,
                 mMap.cameraPosition.target.longitude)
-            m.position = mMap.cameraPosition.target
+
+            address_text.text = address
         }
 
         //마커 드래그 후 카메라 이동
@@ -131,23 +134,13 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
                 """.trimIndent()
         )
         builder.setCancelable(true)
-        builder.setPositiveButton("설정", DialogInterface.OnClickListener { dialog, id ->
+        builder.setPositiveButton("설정") { dialog, id ->
             val callGPSSettingIntent =
                 Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             startActivity(callGPSSettingIntent)
-        })
-        builder.setNegativeButton("취소",
-            DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
-        builder.create().show()
+        }
+         builder.setNegativeButton("취소"
+         ) { dialog, id -> dialog.cancel() }
+         builder.create().show()
     }
-
-
-
-
-    fun checkLocationServicesStatus(): Boolean {
-        val locationManager = activity?.getSystemService(LOCATION_SERVICE) as LocationManager?
-        return (locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-    }
-
 }
