@@ -114,7 +114,9 @@ class GpsTracker(mapFragment: MapFragment) : Service(), LocationListener {
         return longitude
     }
 
-    override fun onLocationChanged(location: Location?) {}
+    override fun onLocationChanged(location: Location?) {
+        Log.d("TAG", "HEHE ${location?.longitude}")
+    }
 
     override fun onProviderDisabled(provider: String?) {}
 

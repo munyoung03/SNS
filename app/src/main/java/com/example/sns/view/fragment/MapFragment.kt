@@ -11,11 +11,15 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentMapBinding
+import com.example.sns.view.activity.MainActivity
 import com.example.sns.viewModel.MapViewModel
 import com.example.sns.widget.GpsTracker
+import com.example.sns.widget.extension.startActivity
+import com.example.sns.widget.extension.toast
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -23,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_map.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
-class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReadyCallback {
+class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReadyCallback{
 
     private lateinit var gpsTracker: GpsTracker
     private lateinit var mMap: GoogleMap
@@ -38,7 +42,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
     override fun init() {
         if(!viewModel.checkLocationServicesStatus())
-        showDialogForLocationServiceSetting()
+            showDialogForLocationServiceSetting()
     }
 
     override fun onCreateView(
@@ -67,26 +71,30 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
 
     override fun observerViewModel() {
-
     }
 
 
     override fun onMapReady(googleMap: GoogleMap) {
+
+        Log.d("TAG", "레디 맵")
 
         var latitude = gpsTracker.getLatitude()
         var longitude = gpsTracker.getLongitude()
 
         Log.d("TAG", "위도 : $latitude, 경도 : $longitude")
 
+        //주소 설정
         var address = viewModel.getCurrentAddress(latitude, longitude)
         address_text.text = address
 
         mMap = googleMap
         val latLng = LatLng(latitude, longitude)
 
+        //카메라 위치 이동
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
 
         //----------------------------------------------
+        //마커 생성
         marker = MarkerOptions().position(latLng).draggable(true)
         val m = mMap.addMarker(marker)
         //----------------------------------------------
@@ -99,10 +107,9 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
         }
 
+        //카메라 움직임이 없을시
         mMap.setOnCameraIdleListener {
-            Log.d("TAG", "바이")
             address_text.text = viewModel.getCurrentAddress(latitude, longitude)
-            Log.d("TAG", address_text.text as String?)
         }
 
 
@@ -124,7 +131,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 //        })
     }
 
-     fun showDialogForLocationServiceSetting() {
+    fun showDialogForLocationServiceSetting() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
         builder.setTitle("위치 서비스 비활성화")
         builder.setMessage(
@@ -135,13 +142,15 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         )
         builder.setCancelable(true)
         builder.setPositiveButton("설정") { dialog, id ->
-            val callGPSSettingIntent =
-                Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            startActivity(callGPSSettingIntent)
+            startActivity(MainActivity::class.java)
+            startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
         }
-         builder.setNegativeButton(
-             "취소"
-         ) { dialog, id -> dialog.cancel() }
-         builder.create().show()
+        builder.setNegativeButton(
+            "취소"
+        ) { dialog, id ->
+            startActivity(MainActivity::class.java)
+            toast("위치설정을 허용해주세요")
+        }
+        builder.create().show()
     }
 }

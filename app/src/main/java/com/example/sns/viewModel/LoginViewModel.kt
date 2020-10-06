@@ -18,7 +18,6 @@ class LoginViewModel : BaseViewModel(){
 
     val email = MutableLiveData<String>()
     val password = MutableLiveData<String>()
-    val username = MutableLiveData<String>()
 
     val registerBtn = SingleLiveEvent<Unit>()
     val loginBtn = SingleLiveEvent<Unit>()
@@ -44,11 +43,11 @@ class LoginViewModel : BaseViewModel(){
         })
     }
 
-    fun r_btnClick(){
+    fun rBtnClick(){
         registerBtn.call()
     }
 
-    fun l_btnClick(){
+    fun lBtnClick(){
         loginBtn.call()
     }
 }
