@@ -12,6 +12,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.sns.view.fragment.MapFragment
+import com.google.android.gms.maps.model.Marker
 
 
 class GpsTracker(mapFragment: MapFragment) : Service(), LocationListener {
@@ -23,7 +24,10 @@ class GpsTracker(mapFragment: MapFragment) : Service(), LocationListener {
     private val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 10
     private val MIN_TIME_BW_UPDATES = 1000 * 60 * 1.toLong()
     protected var locationManager: LocationManager? = null
-
+    private var callback : ((Double, Double) -> Unit)? = null;
+    fun setCallback(callback : ((Double , Double)-> Unit)) {
+        this.callback = callback;
+    }
      fun getLocation(context: Context): Location? {
          mContext = context
          Log.d("TAG","NOT ENABLED")
@@ -51,48 +55,9 @@ class GpsTracker(mapFragment: MapFragment) : Service(), LocationListener {
                 ) {
                     Log.d("TAG","GRANTED")
                 } else return null
-                if (isNetworkEnabled) {
-                    Log.d("TAG","ENABLED NET")
-                    locationManager!!.requestLocationUpdates(
-                        LocationManager.NETWORK_PROVIDER,
-                        MIN_TIME_BW_UPDATES,
-                        MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(),
-                        this
-                    )
-                    if (locationManager != null) {
-                        Log.d("TAG","NOT NULL")
-                        location =
-                            locationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                        if (location != null) {
-                            latitude = location!!.latitude
-                            longitude = location!!.longitude
-                            Log.d("TAG", "경도1 : $latitude, 위도1 : $longitude")
-                        }
-                    }
-                }
-                if (isGPSEnabled) {
-                    Log.d("TAG","ENABLED GPS")
-                    if (location == null) {
-                        Log.d("TAG","NOT NULL LOC")
-                        locationManager!!.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(),
-                            this
-                        )
-                        if (locationManager != null) {
+                Log.d("TAG", "HAHAHAHA")
+                locationManager!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, this)
 
-                            Log.d("TAG","NOT NULL MANAGER")
-                            location =
-                                locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                            if (location != null) {
-                                latitude = location!!.latitude
-                                longitude = location!!.longitude
-                                Log.d("TAG", "경도2 : $latitude, 위도2 : $longitude")
-                            }
-                        }
-                    }
-                }
             }
         } catch (e: Exception) {
             Log.d("@@@", "" + e.toString())
@@ -116,6 +81,8 @@ class GpsTracker(mapFragment: MapFragment) : Service(), LocationListener {
 
     override fun onLocationChanged(location: Location?) {
         Log.d("TAG", "HEHE ${location?.longitude}")
+        if(location != null){ callback?.invoke(location.latitude, location.longitude)
+        locationManager!!.removeUpdates(this)}
     }
 
     override fun onProviderDisabled(provider: String?) {}

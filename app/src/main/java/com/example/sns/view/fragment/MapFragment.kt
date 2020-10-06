@@ -3,6 +3,7 @@ package com.example.sns.view.fragment
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -11,17 +12,23 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentMapBinding
+import com.example.sns.view.activity.LoadingActivity
 import com.example.sns.view.activity.MainActivity
 import com.example.sns.viewModel.MapViewModel
 import com.example.sns.widget.GpsTracker
+import com.example.sns.widget.extension.noFinishStartActivity
+import com.example.sns.widget.extension.refreshFragment
 import com.example.sns.widget.extension.startActivity
 import com.example.sns.widget.extension.toast
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_map.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -60,12 +67,11 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
+        Log.d("TAG", "CALL ON CREATE VIEW")
         mapView.getMapAsync(this)
 
         gpsTracker = GpsTracker(this)
         gpsTracker.getLocation(requireContext())
-
         return view
     }
 
@@ -73,6 +79,23 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
     override fun observerViewModel() {
     }
 
+    fun updateLocation(latitude : Double, longitude : Double)  {
+        gpsTracker.setCallback { d, d2 -> updateLocation(d, d2);  }
+
+        //주소 설정
+        var address = viewModel.getCurrentAddress(latitude, longitude)
+        address_text.text = address
+
+        val latLng = LatLng(latitude, longitude)
+
+        //카메라 위치 이동
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
+
+        //----------------------------------------------
+        //마커 생성
+        marker.position(latLng)
+        //----------------------------------------------
+    }
 
     override fun onMapReady(googleMap: GoogleMap) {
 
@@ -83,23 +106,14 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
         Log.d("TAG", "위도 : $latitude, 경도 : $longitude")
 
-        //주소 설정
-        var address = viewModel.getCurrentAddress(latitude, longitude)
-        address_text.text = address
 
         mMap = googleMap
-        val latLng = LatLng(latitude, longitude)
+        marker = MarkerOptions().position(LatLng(latitude, longitude)).draggable(true)
 
-        //카메라 위치 이동
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
+        updateLocation(latitude, longitude)
 
-        //----------------------------------------------
-        //마커 생성
-        marker = MarkerOptions().position(latLng).draggable(true)
-        val m = mMap.addMarker(marker)
-        //----------------------------------------------
-
-        //카메라 이동시 마커 따라옴
+        val m =  mMap.addMarker(marker)
+            //카메라 이동시 마커 따라옴
         mMap.setOnCameraMoveListener {
             m.position = mMap.cameraPosition.target
             latitude = mMap.cameraPosition.target.latitude
@@ -111,7 +125,6 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         mMap.setOnCameraIdleListener {
             address_text.text = viewModel.getCurrentAddress(latitude, longitude)
         }
-
 
         //마커 드래그 후 카메라 이동
 //        mMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
@@ -142,7 +155,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         )
         builder.setCancelable(true)
         builder.setPositiveButton("설정") { dialog, id ->
-            startActivity(MainActivity::class.java)
+            noFinishStartActivity(MainActivity::class.java)
             startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
         }
         builder.setNegativeButton(
@@ -153,4 +166,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         }
         builder.create().show()
     }
+
+
+
 }

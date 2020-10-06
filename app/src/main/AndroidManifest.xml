@@ -19,10 +19,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activity.LodingActivity"></activity>
+        <activity android:name=".view.activity.LoadingActivity" />
         <activity android:name=".view.activity.LoginActivity" />
         <activity android:name=".view.activity.RegisterActivity" />
         <activity android:name=".view.activity.MainActivity" />
+
 
         <uses-library
             android:name="org.apache.http.legacy"
