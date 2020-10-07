@@ -23,10 +23,6 @@ import java.util.*
 
 class MapViewModel(private val application : Application) : BaseViewModel() {
 
-    val checkDialogEvent = MutableLiveData<Boolean>()
-
-
-
     fun checkLocationServicesStatus(): Boolean {
         val locationManager = application.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
         return (locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
