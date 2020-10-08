@@ -55,7 +55,7 @@
             android:id="@+id/button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="92dp"
             android:background="#00B3A2"
             android:text="이 위치로 주소 설정"
             android:textColor="#FFFFFF"
