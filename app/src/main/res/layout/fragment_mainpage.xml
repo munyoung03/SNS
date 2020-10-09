@@ -12,16 +12,39 @@
         android:layout_height="match_parent"
         tools:context=".view.fragment.MainPageFragment">
 
+        <EditText
+            android:id="@+id/title_edit"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="title"
+            app:layout_constraintBottom_toTopOf="@+id/massage_edit"
+            app:layout_constraintEnd_toEndOf="@+id/massage_edit" />
+
+        <EditText
+            android:id="@+id/massage_edit"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="message"
+            app:layout_constraintBottom_toBottomOf="@+id/button2"
+            app:layout_constraintEnd_toStartOf="@+id/button2"
+            app:layout_constraintTop_toTopOf="@+id/button2" />
+
+        <EditText
+            android:id="@+id/token_edit"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="token"
+            app:layout_constraintEnd_toEndOf="@+id/massage_edit"
+            app:layout_constraintTop_toBottomOf="@+id/massage_edit" />
+
         <Button
-            android:id="@+id/push_btn"
+            android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="알림버튼"
-            android:onClick="@{()->viewModel.pushBtnClick()}"
+            android:text="Send"
+            android:onClick="@{()->viewModel.btnClick()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

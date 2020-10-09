@@ -7,11 +7,12 @@ import com.example.sns.base.BaseViewModel
 import com.example.sns.widget.SingleLiveEvent
 
 class MainPageViewModel : BaseViewModel() {
-    val pushBtn = SingleLiveEvent<Unit>()
+    val btn = SingleLiveEvent<Unit>()
 
-    fun pushBtnClick()
+    fun btnClick()
     {
-        pushBtn.call()
+        btn.call()
     }
+
 
 }
