@@ -1,9 +1,14 @@
 package com.example.sns.view.fragment
 
+import android.app.Notification
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentMainpageBinding
@@ -27,6 +32,11 @@ class MainPageFragment : BaseFragment<FragmentMainpageBinding, MainPageViewModel
     }
 
     override fun observerViewModel() {
+        with(viewModel){
+            pushBtn.observe(this@MainPageFragment, Observer {
+
+            })
+        }
     }
 
 

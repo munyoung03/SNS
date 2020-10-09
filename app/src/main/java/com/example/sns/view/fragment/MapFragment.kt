@@ -118,8 +118,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         builder.create().show()
     }
 
-    override fun onLocationChanged(location: Location?) {
-        if(location == null) return
+    override fun onLocationChanged(location: Location) {
         if(view == null) return;
 
         var latitude = location.latitude
@@ -127,7 +126,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
         Log.d("TAG", "위도 : $latitude, 경도 : $longitude")
         //주소 설정
-        var address = getCurrentAddress(latitude, longitude)
+        val address = getCurrentAddress(latitude, longitude)
         if(address != null) {
             Log.d("TAG", address)
             address_text.text = address
@@ -180,10 +179,10 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
     }
 
-    override fun onProviderEnabled(provider: String?) {
+    override fun onProviderEnabled(provider: String) {
     }
 
-    override fun onProviderDisabled(provider: String?) {
+    override fun onProviderDisabled(provider: String) {
     }
 
     private fun getCurrentAddress(latitude: Double, longitude: Double): String? {
