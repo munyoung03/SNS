@@ -1,7 +1,9 @@
 package com.example.sns.view.fragment
 
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.util.Base64
 import android.util.Log
-import android.widget.Toast
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentMainpageBinding
@@ -9,6 +11,7 @@ import com.example.sns.viewModel.MainPageViewModel
 import com.example.sns.widget.extension.toast
 import com.google.firebase.iid.FirebaseInstanceId
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import java.security.MessageDigest
 
 
 class MainPageFragment : BaseFragment<FragmentMainpageBinding, MainPageViewModel>(){
@@ -40,6 +43,5 @@ class MainPageFragment : BaseFragment<FragmentMainpageBinding, MainPageViewModel
 
         }
     }
-
 
 }
