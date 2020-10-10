@@ -1,5 +1,8 @@
 package com.example.sns.view.activity
 
+import android.content.Intent
+import android.nfc.Tag
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import com.example.sns.R
@@ -10,10 +13,16 @@ import com.example.sns.viewModel.LoginViewModel
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.startActivity
 import com.example.sns.widget.extension.toast
+import com.facebook.*
+import com.facebook.login.LoginResult
 import kotlinx.android.synthetic.main.activity_login.*
+import org.json.JSONException
+import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
+
+    lateinit var callBackManager : CallbackManager
 
     override val viewModel: LoginViewModel
         get() = getViewModel(LoginViewModel::class)
@@ -48,6 +57,57 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             registerBtn.observe(this@LoginActivity, Observer {
                 startActivity(RegisterActivity::class.java)
             })
+
+            faceBookLoginBtn.observe(this@LoginActivity, Observer {
+                btn_facebook_login.setPermissions(listOf("email", "public_profile"))
+                callBackManager = CallbackManager.Factory.create()
+                btn_facebook_login.registerCallback(callBackManager, object : FacebookCallback<LoginResult>{
+                    override fun onSuccess(result: LoginResult?) {
+                        if(result?.accessToken != null)
+                        {
+                            val accessToken = result.accessToken
+                            getFacebookInfo(accessToken)
+                        }else{
+                            Log.d("TAG", "access token is null")
+                        }
+                    }
+
+                    override fun onCancel() {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onError(error: FacebookException?) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
+            })
+
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callBackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun getFacebookInfo(accessToken: AccessToken){
+
+        val graphRequest : GraphRequest = GraphRequest.newMeRequest(accessToken
+        ) { resultObject, response ->
+            try {
+                val name = resultObject.getString("name")
+                val email = resultObject.getString("email")
+                val image = resultObject.getJSONObject("picture").getJSONObject("data").getString("url")
+                Log.d("TAG", "name $name + email $email + image $image")
+            }catch (e : JSONException){
+                e.printStackTrace()
+            }
+        }
+
+        var parameters : Bundle = Bundle()
+        parameters.putString("fields", "id,name,picture.width(200)")
+        graphRequest.parameters = parameters
+        graphRequest.executeAsync()
     }
 }

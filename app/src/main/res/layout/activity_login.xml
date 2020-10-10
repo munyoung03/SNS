@@ -30,14 +30,14 @@
             android:id="@+id/email"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
             android:background="@drawable/teduri"
             android:hint="Email"
             android:text="@={viewModel.email}"
             android:textSize="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <EditText
             android:id="@+id/password"
@@ -73,12 +73,9 @@
             android:layout_marginTop="20dp"
             android:onClick="@{()->viewModel.rBtnClick()}"
             android:text="회원가입"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/login_btn"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/login_btn"
-            app:layout_constraintTop_toBottomOf="@+id/login_btn"
-            app:layout_constraintVertical_bias="0.119" />
+            app:layout_constraintEnd_toEndOf="@+id/btn_facebook_login"
+            app:layout_constraintStart_toStartOf="@+id/btn_facebook_login"
+            app:layout_constraintTop_toBottomOf="@+id/btn_facebook_login" />
 
         <CheckBox
             android:id="@+id/check_login"
@@ -90,6 +87,16 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/password"
             app:layout_constraintTop_toBottomOf="@+id/password" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/btn_facebook_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->viewModel.faceBookLoginBtnClick()}"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/login_btn"
+            app:layout_constraintStart_toStartOf="@+id/login_btn"
+            app:layout_constraintTop_toBottomOf="@+id/login_btn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
