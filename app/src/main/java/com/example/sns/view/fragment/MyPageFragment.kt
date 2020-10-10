@@ -10,6 +10,7 @@ import com.example.sns.view.activity.LoginActivity
 import com.example.sns.viewModel.MyPageViewModel
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.startActivity
+import com.facebook.login.LoginManager
 import kotlinx.android.synthetic.main.fragment_mypage.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
@@ -34,6 +35,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding, MyPageViewModel>() {
     override fun observerViewModel() {
         with(viewModel){
             logoutBtn.observe(this@MyPageFragment, Observer {
+                LoginManager.getInstance().logOut()
                 setData()
                 startActivity(LoginActivity::class.java)
             })

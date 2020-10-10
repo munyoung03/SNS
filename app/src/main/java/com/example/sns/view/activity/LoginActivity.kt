@@ -67,6 +67,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                         {
                             val accessToken = result.accessToken
                             getFacebookInfo(accessToken)
+                            startActivity(MainActivity::class.java)
                         }else{
                             Log.d("TAG", "access token is null")
                         }
@@ -99,7 +100,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 val name = resultObject.getString("name")
                 val email = resultObject.getString("email")
                 val image = resultObject.getJSONObject("picture").getJSONObject("data").getString("url")
-                Log.d("TAG", "name $name + email $email + image $image")
+                Log.d("TAG", "이름 $name + 이메일 $email + 이미지 $image")
+                toast(name.toString())
             }catch (e : JSONException){
                 e.printStackTrace()
             }
