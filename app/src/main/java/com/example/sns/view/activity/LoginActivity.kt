@@ -43,7 +43,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 if(status.value == "200") {
                     if(check_login.isChecked)
                     {
-                        MyApplication.prefs.setCheckLogin("checklogin", true)
+                        MyApplication.prefs.setCheckLogin("checklogin", "normal login")
                     }
                     toast("로그인 성공")
                     startActivity(MainActivity::class.java)
@@ -68,6 +68,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                             val accessToken = result.accessToken
                             getFacebookInfo(accessToken)
                             startActivity(MainActivity::class.java)
+                            MyApplication.prefs.setCheckLogin("checklogin", "facebook login")
                         }else{
                             Log.d("TAG", "access token is null")
                         }
@@ -101,6 +102,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 val email = resultObject.getString("email")
                 val image = resultObject.getJSONObject("picture").getJSONObject("data").getString("url")
                 Log.d("TAG", "이름 $name + 이메일 $email + 이미지 $image")
+                MyApplication.prefs.setUsername("name", name)
+                MyApplication.prefs.setEmail("email", email)
                 toast(name.toString())
             }catch (e : JSONException){
                 e.printStackTrace()

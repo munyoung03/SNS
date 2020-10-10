@@ -19,7 +19,7 @@ import kotlin.math.log
 
 class SplashActivity : AppCompatActivity() {
 
-    val checkLogin: Boolean = MyApplication.prefs.getCheckLogin("checklogin", false)
+    val checkLogin: String = MyApplication.prefs.getCheckLogin("checklogin", "null")
     var checkPer: Boolean = false
 
     var permission_list = arrayOf(
@@ -46,10 +46,22 @@ class SplashActivity : AppCompatActivity() {
     }
 
     fun login() {
-        if (checkLogin) {
+        if (checkLogin == "facebook login") {
             toast("자동로그인 성공")
             startActivity(MainActivity::class.java)
-        } else {
+        } else if(checkLogin == "normal login"){
+            toast("자동로그인 성공")
+            val accessToken = AccessToken.getCurrentAccessToken()
+            if(accessToken != null)
+            {
+                toast("세션 만료")
+                startActivity(LoginActivity::class.java)
+            }
+            else {
+                startActivity(MainActivity::class.java)
+            }
+        }
+        else {
             startActivity(LoginActivity::class.java)
         }
     }
