@@ -23,6 +23,7 @@ class MainPageFragment : BaseFragment<FragmentMainpageBinding, MainPageViewModel
         get() = R.layout.fragment_mainpage
 
     override fun init() {
+        //이 토큰이용하여 푸시보냄
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener {
                 if(!it.isSuccessful)

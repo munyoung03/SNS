@@ -48,6 +48,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
 
     override fun init() {
+        //위치서비스 여부 확인
         if(!viewModel.checkLocationServicesStatus())
             showDialogForLocationServiceSetting()
     }
@@ -91,10 +92,12 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
         mMap = googleMap
 
+        //현재위치 얻어옴
         locationManager!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, this)
 
     }
 
+    //다이얼로그 뛰움
     private fun showDialogForLocationServiceSetting() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
         builder.setTitle("위치 서비스 비활성화")
@@ -185,6 +188,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
     override fun onProviderDisabled(provider: String) {
     }
 
+    //주소가 바뀔시
     private fun getCurrentAddress(latitude: Double, longitude: Double): String? {
 
         Log.d("TAG", "지오코더들어옴")

@@ -59,8 +59,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             })
 
             faceBookLoginBtn.observe(this@LoginActivity, Observer {
+                //페이스북 연동 성공시 받아올 데이터 정의
                 btn_facebook_login.setPermissions(listOf("email", "public_profile"))
                 callBackManager = CallbackManager.Factory.create()
+                //통신
                 btn_facebook_login.registerCallback(callBackManager, object : FacebookCallback<LoginResult>{
                     override fun onSuccess(result: LoginResult?) {
                         if(result?.accessToken != null)

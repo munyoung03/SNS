@@ -14,10 +14,13 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class MyFireBaseMessagingService : FirebaseMessagingService() {
+
+    //FCM 토큰발급
     override fun onNewToken(s: String) {
         Log.d("FCM Log", "Refreshed token: $s")
     }
 
+    //메세지 들어온거 받아서 띄움
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         if (remoteMessage.notification != null) {
             Log.d("FCM Log", "알림 메세지: " + remoteMessage.notification!!.body)
