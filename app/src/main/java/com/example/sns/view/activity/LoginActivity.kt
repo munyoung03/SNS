@@ -15,6 +15,10 @@ import com.example.sns.widget.extension.startActivity
 import com.example.sns.widget.extension.toast
 import com.facebook.*
 import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -25,6 +29,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
     lateinit var callBackManager : CallbackManager
 
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+
+    private val RC_SIGN_IN = 99
 
     override val viewModel: LoginViewModel
         get() = getViewModel(LoginViewModel::class)
@@ -32,7 +39,20 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
     override val layoutRes: Int
         get() = R.layout.activity_login
 
-    override fun init() { viewModel.retrofit = RetrofitClient.getInstance()}
+    override fun init() {
+        viewModel.retrofit = RetrofitClient.getInstance()
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            //'R.string.default_web_client_id' 에는 본인의 클라이언트 아이디를 넣어주시면 됩니다.
+            //저는 스트링을 따로 빼서 저렇게 사용했지만 스트링을 통째로 넣으셔도 됩니다.
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        //firebase auth 객체
+        firebaseAuth = FirebaseAuth.getInstance()}
 
 
     override fun observerViewModel() {

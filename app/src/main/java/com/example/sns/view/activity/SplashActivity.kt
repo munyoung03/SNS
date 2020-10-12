@@ -14,6 +14,7 @@ import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.startActivity
 import com.example.sns.widget.extension.toast
 import com.facebook.AccessToken
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import java.security.MessageDigest
 import kotlin.math.log
 
@@ -60,8 +61,18 @@ class SplashActivity : AppCompatActivity() {
             else {
                 startActivity(MainActivity::class.java)
             }
-        }
-        else {
+        } else if(checkLogin == "normal login"){
+            toast("자동로그인 성공")
+            val accessToken = GoogleSignIn.getLastSignedInAccount(this)
+            if(accessToken !== null)
+            {
+                startActivity(MainActivity::class.java)
+            }
+            else {
+                toast("세션 만료")
+                startActivity(LoginActivity::class.java)
+            }
+        } else {
             startActivity(LoginActivity::class.java)
         }
     }
