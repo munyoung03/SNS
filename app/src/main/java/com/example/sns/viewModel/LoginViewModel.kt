@@ -22,6 +22,7 @@ class LoginViewModel : BaseViewModel(){
     val registerBtn = SingleLiveEvent<Unit>()
     val loginBtn = SingleLiveEvent<Unit>()
     val faceBookLoginBtn = SingleLiveEvent<Unit>()
+    val googleLoginBtn = SingleLiveEvent<Unit>()
 
     var status = MutableLiveData<String>()
 
@@ -54,5 +55,9 @@ class LoginViewModel : BaseViewModel(){
 
     fun faceBookLoginBtnClick(){
         faceBookLoginBtn.call()
+    }
+
+    fun googleLoginBtnClick(){
+        googleLoginBtn.call()
     }
 }

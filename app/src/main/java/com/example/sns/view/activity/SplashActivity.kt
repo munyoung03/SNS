@@ -61,7 +61,7 @@ class SplashActivity : AppCompatActivity() {
             else {
                 startActivity(MainActivity::class.java)
             }
-        } else if(checkLogin == "normal login"){
+        } else if(checkLogin == "google login"){
             toast("자동로그인 성공")
             val accessToken = GoogleSignIn.getLastSignedInAccount(this)
             if(accessToken !== null)
