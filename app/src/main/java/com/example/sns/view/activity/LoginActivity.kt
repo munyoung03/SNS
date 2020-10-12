@@ -24,6 +24,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
     lateinit var callBackManager : CallbackManager
 
+    private lateinit var firebaseAuth: FirebaseAuth
+
     override val viewModel: LoginViewModel
         get() = getViewModel(LoginViewModel::class)
 
