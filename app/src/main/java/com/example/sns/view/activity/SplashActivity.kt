@@ -14,6 +14,7 @@ import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.startActivity
 import com.example.sns.widget.extension.toast
 import com.facebook.AccessToken
+import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import java.security.MessageDigest
 import kotlin.math.log
@@ -47,19 +48,19 @@ class SplashActivity : AppCompatActivity() {
     }
 
     fun login() {
-        if (checkLogin == "facebook login") {
+        if (checkLogin == "normal login") {
             toast("자동로그인 성공")
             startActivity(MainActivity::class.java)
-        } else if(checkLogin == "normal login"){
+        } else if(checkLogin == "facebook login"){
             toast("자동로그인 성공")
             val accessToken = AccessToken.getCurrentAccessToken()
-            if(accessToken != null)
+            if(accessToken !== null)
             {
-                toast("세션 만료")
-                startActivity(LoginActivity::class.java)
+                startActivity(MainActivity::class.java)
             }
             else {
-                startActivity(MainActivity::class.java)
+                toast("세션 만료")
+                startActivity(LoginActivity::class.java)
             }
         } else if(checkLogin == "google login"){
             toast("자동로그인 성공")
@@ -73,13 +74,13 @@ class SplashActivity : AppCompatActivity() {
                 startActivity(LoginActivity::class.java)
             }
         } else {
+            LoginManager.getInstance().logOut()
             startActivity(LoginActivity::class.java)
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     fun checkPermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
         for (permission in permission_list) {
             val chk = checkCallingOrSelfPermission(permission!!)
             if (chk == PackageManager.PERMISSION_DENIED) {

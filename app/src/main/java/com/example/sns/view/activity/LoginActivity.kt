@@ -101,7 +101,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                             val accessToken = result.accessToken
                             getFacebookInfo(accessToken)
                             startActivity(MainActivity::class.java)
-                            MyApplication.prefs.setCheckLogin("checklogin", "facebook login")
+                            if(check_login.isChecked)
+                            {
+                                MyApplication.prefs.setCheckLogin("checklogin", "facebook login")
+                            }
                         }else{
                             Log.d("TAG", "access token is null")
                         }
