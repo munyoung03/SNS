@@ -12,4 +12,5 @@ val MyModule = module {
     viewModel { MapViewModel(androidApplication()) }
     viewModel { MainPageViewModel() }
     viewModel { MyPageViewModel() }
+    viewModel { ChattingViewModel() }
 }

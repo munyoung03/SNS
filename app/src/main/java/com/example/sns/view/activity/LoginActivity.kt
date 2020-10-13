@@ -44,6 +44,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
         get() = R.layout.activity_login
 
     override fun init() {
+
         viewModel.retrofit = RetrofitClient.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
