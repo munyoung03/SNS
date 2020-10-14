@@ -29,11 +29,14 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         get() = R.layout.fragment_chatting
 
     override fun init() {
+        //서버에서 emit을 통해 데이터를 전달 해줄시 동작
         viewModel.mSocket.on("user connect", onResult)
     }
 
     override fun observerViewModel() {
         with(viewModel){
+
+            //버튼 클릭시 emit을 통해 서버에 같은 이벤트 이름을 가진 socket.on으로 jsonObject를 날림
             joinRoomBtn.observe(this@ChattingFragment, Observer {
                 val jsonObject = JSONObject()
                 try {
@@ -47,6 +50,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         }
     }
 
+    //android에 mSocketon이 동작시 행할 행동
     private var onResult:Emitter.Listener= Emitter.Listener { args ->
         activity?.runOnUiThread(Runnable {
             val data = args[0] as JSONObject
