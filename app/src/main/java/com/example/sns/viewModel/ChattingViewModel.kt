@@ -13,6 +13,7 @@ class ChattingViewModel : BaseViewModel(){
     var targetEmail = MutableLiveData<String>()
 
     var joinRoomBtn = SingleLiveEvent<Unit>()
+    var sendMessageBtn = SingleLiveEvent<Unit>()
 
     var mSocket: Socket = IO.socket("http://192.168.10.163:8080")
 
@@ -26,5 +27,11 @@ class ChattingViewModel : BaseViewModel(){
     {
         joinRoomBtn.call()
     }
+
+    fun sendMessageBtnClick()
+    {
+        sendMessageBtn.call()
+    }
+
 
 }

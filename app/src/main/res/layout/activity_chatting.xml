@@ -33,6 +33,7 @@
 
         <Button
             android:id="@+id/send"
+            android:onClick="@{()->viewModel.sendMessageBtnClick()}"
             android:layout_width="93dp"
             android:layout_height="52dp"
             android:text="전송"

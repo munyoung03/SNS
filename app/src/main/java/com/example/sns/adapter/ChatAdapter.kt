@@ -9,13 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sns.R
 import com.example.sns.model.ChatModel
+import com.example.sns.widget.MyApplication
 import org.w3c.dom.Text
 import kotlin.collections.ArrayList
 
 class ChatAdapter(val context: Context, val arrayList: ArrayList<ChatModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-
-
-    private lateinit var preferences: SharedPreferences
 
     fun addItem(item: ChatModel) {//아이템 추가
         arrayList.add(item)
@@ -59,10 +57,9 @@ class ChatAdapter(val context: Context, val arrayList: ArrayList<ChatModel>) : R
     }
 
     override fun getItemViewType(position: Int): Int {//여기서 뷰타입을 1, 2로 바꿔서 지정해줘야 내채팅 너채팅을 바꾸면서 쌓을 수 있음
-        preferences = context.getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
 
         //내 아이디와 arraylist의 name이 같다면 내꺼 아니면 상대꺼
-        return if (arrayList[position].name == preferences.getString("name","")) {
+        return if (arrayList[position].name == MyApplication.prefs.getUsername("myName","")) {
             1
         } else {
             2
