@@ -13,7 +13,7 @@ import com.example.sns.widget.MyApplication
 import org.w3c.dom.Text
 import kotlin.collections.ArrayList
 
-class ChatAdapter(val context: Context, val arrayList: ArrayList<ChatModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ChatAdapter(val arrayList: ArrayList<ChatModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     fun addItem(item: ChatModel) {//아이템 추가
         arrayList.add(item)
@@ -22,12 +22,12 @@ class ChatAdapter(val context: Context, val arrayList: ArrayList<ChatModel>) : R
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
         if(viewType == 1){
-            view = LayoutInflater.from(context).inflate(R.layout.item_my_chat, parent, false)
+            view = LayoutInflater.from(parent.context).inflate(R.layout.item_my_chat, parent, false)
             return Holder(view)
         }
         //getItemViewType 에서 뷰타입 2을 리턴받았다면 상대채팅레이아웃을 받은 Holder2를 리턴
         else{
-            view = LayoutInflater.from(context).inflate(R.layout.item_your_chat, parent, false)
+            view = LayoutInflater.from(parent.context).inflate(R.layout.item_your_chat, parent, false)
             return Holder2(view)
         }
     }

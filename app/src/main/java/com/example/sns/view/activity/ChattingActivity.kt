@@ -26,7 +26,7 @@ import java.lang.Exception
 class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel>() {
 
     var arrayList = arrayListOf<ChatModel>()
-    val mAdapter = ChatAdapter(this, arrayList)
+    val mAdapter = ChatAdapter(arrayList)
 
     override val viewModel: ChattingViewModel
         get() = getViewModel(ChattingViewModel::class)
@@ -53,19 +53,24 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
     }
 
     private var sendMessageStatus: Emitter.Listener = Emitter.Listener { args ->
+        Log.d("TAG", "안녕하세연")
         runOnUiThread(Runnable {
             val data = args[0] as JSONObject
             val success : Boolean
             val message : String
             try {
                 success = data.getBoolean("success")
-                message = data.getString("message")
                 if(success)
                 {
+                    val format = ChatModel(editText2.text.toString(), MyApplication.prefs.getUsername("myName", ""))
+                    mAdapter.addItem(format)
+                    mAdapter.notifyDataSetChanged()
+
+                    editText2.setText("")
                     toast("전송성공")
                 }
                 else{
-                    toast(message)
+                    toast("전송실패")
                 }
             }catch (e: Exception){
                 return@Runnable
@@ -74,6 +79,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
     }
 
     private var newMessage: Emitter.Listener = Emitter.Listener { args ->
+        Log.d("TAG", "잘가세연")
         runOnUiThread(Runnable {
             val data = args[0] as JSONObject
             val user : String
@@ -91,6 +97,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                 mAdapter.addItem(format)
                 mAdapter.notifyDataSetChanged()
             }catch (e: Exception){
+                Log.d("TAG", "오류세연")
                 return@Runnable
             }
         })
