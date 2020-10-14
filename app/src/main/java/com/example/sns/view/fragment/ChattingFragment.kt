@@ -2,6 +2,7 @@ package com.example.sns.view.fragment
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
@@ -37,11 +38,13 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         with(viewModel){
 
             //버튼 클릭시 emit을 통해 서버에 같은 이벤트 이름을 가진 socket.on으로 jsonObject를 날림
-            joinRoomBtn.observe(this@ChattingFragment, Observer {
+            joinRoomBtn.observe(this@ChattingFragment, {
+                Log.d("TAG", "버튼 클릭 성공")
                 val jsonObject = JSONObject()
                 try {
                     jsonObject.put("id", myEmail)
                 } catch (e: JSONException) {
+                    Log.d("TAG", "캐치")
                     e.printStackTrace()
                 }
                 mSocket.emit("user connect", jsonObject)
@@ -59,6 +62,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
                 success = data.getBoolean("success")
                 if(success)
                 {
+                    Log.d("TAG", "룸입장 성공")
                     startActivity(MainActivity::class.java)
                 }
                 else{

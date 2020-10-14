@@ -22,4 +22,10 @@
         android:name="com.example.sns.view.fragment.MyPageFragment"
         android:label="@string/title_mypage"
         tools:layout="@layout/fragment_mypage" />
+
+    <fragment
+        android:id="@+id/navigation_chatting"
+        android:name="com.example.sns.view.fragment.ChattingFragment"
+        android:label="@string/title_chatting"
+        tools:layout="@layout/fragment_chatting"/>
 </navigation>
