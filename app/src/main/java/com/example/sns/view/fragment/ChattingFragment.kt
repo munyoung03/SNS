@@ -3,6 +3,7 @@ package com.example.sns.view.fragment
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
@@ -33,19 +34,18 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         get() = R.layout.fragment_chatting
 
     override fun init() {
-        //서버에서 emit을 통해 데이터를 전달 해줄시 동작
-        viewModel.mSocket.on("user connect", onResult)
     }
 
     override fun observerViewModel() {
-        with(viewModel){
+        with(viewModel) {
 
             //버튼 클릭시 emit을 통해 서버에 같은 이벤트 이름을 가진 socket.on으로 jsonObject를 날림
             joinRoomBtn.observe(this@ChattingFragment, {
                 Log.d("TAG", "버튼 클릭 성공")
                 val jsonObject = JSONObject()
                 try {
-                    jsonObject.put("id", myEmail)
+                    jsonObject.put("id", myEmail.value)
+                    Log.d("TAG", myEmail.value.toString())
                 } catch (e: JSONException) {
                     Log.d("TAG", "캐치")
                     e.printStackTrace()
@@ -53,30 +53,19 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
                 mSocket.emit("user connect", jsonObject)
 
             })
-        }
-    }
 
-    //android에 mSocketon이 동작시 행할 행동
-    private var onResult:Emitter.Listener= Emitter.Listener { args ->
-        activity?.runOnUiThread(Runnable {
-            val data = args[0] as JSONObject
-            val success : Boolean
-            try {
-                success = data.getBoolean("success")
-                if(success)
+            finishUserConnect.observe(this@ChattingFragment, Observer {
+                Log.d("TAG", it.toString())
+                if(it)
                 {
-                    Log.d("TAG", "룸입장 성공")
-                    MyApplication.prefs.getUsername("myName", my_name.text.toString())
-                    MyApplication.prefs.getUsername("targetName", target_name.text.toString())
+                    toast("입장")
                     startActivity(ChattingActivity::class.java)
                 }
-                else{
-                    toast("연결에 실패하였습니다.")
+                else
+                {
+                    toast("실패")
                 }
-            }catch (e: Exception){
-                return@Runnable
-            }
-        })
+            })
+        }
     }
-
 }

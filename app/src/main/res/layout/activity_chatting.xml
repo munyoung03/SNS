@@ -24,6 +24,7 @@
 
         <EditText
             android:id="@+id/editText2"
+            android:text="@={viewModel.messageEdit}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="할 말"
