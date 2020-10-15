@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sns.R
 import com.example.sns.model.ChatModel
@@ -13,7 +14,7 @@ import com.example.sns.widget.MyApplication
 import org.w3c.dom.Text
 import kotlin.collections.ArrayList
 
-class ChatAdapter(val arrayList: ArrayList<ChatModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ChatAdapter(var arrayList: ArrayList<ChatModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     fun addItem(item: ChatModel) {//아이템 추가
         arrayList.add(item)

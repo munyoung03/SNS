@@ -12,6 +12,7 @@ import com.example.sns.view.activity.ChattingActivity
 import com.example.sns.view.activity.MainActivity
 import com.example.sns.viewModel.ChattingViewModel
 import com.example.sns.widget.MyApplication
+import com.example.sns.widget.extension.noFinishStartActivity
 import com.example.sns.widget.extension.startActivity
 import com.example.sns.widget.extension.toast
 import com.github.nkzawa.emitter.Emitter
@@ -34,6 +35,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         get() = R.layout.fragment_chatting
 
     override fun init() {
+        viewModel.connect()
     }
 
     override fun observerViewModel() {
@@ -59,7 +61,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
                 if(it)
                 {
                     toast("입장")
-                    startActivity(ChattingActivity::class.java)
+                    noFinishStartActivity(ChattingActivity::class.java)
                 }
                 else
                 {

@@ -1,5 +1,6 @@
 package com.example.sns.view.activity
 
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sns.R
@@ -25,6 +26,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
         get() = R.layout.activity_chatting
 
     override fun init() {
+        viewModel.connect()
         chat_recyclerview.adapter = mAdapter
         //레이아웃 매니저 선언
         chat_recyclerview.layoutManager = LinearLayoutManager(this)
@@ -34,23 +36,26 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
 
     override fun observerViewModel() {
         with(viewModel){
-            sendMessageBtn.observe(this@ChattingActivity, Observer {
+            sendMessageBtn.observe(this@ChattingActivity, {
                 sendMessage()
             })
-            finishSend.observe(this@ChattingActivity, Observer {
-                if(it) {
-                    toast("전송 성공")
-                    mAdapter.addItem(ChatModel(messageEdit.value.toString(),  MyApplication.prefs.getUsername("myName", "")))
+
+            finishReceiveMessage.observe(this@ChattingActivity, {
+                Log.d("TAG", "SUC")
+                mAdapter.addItem(ChatModel(receiveMessage, receiveUser))
+                mAdapter.notifyDataSetChanged()
+            })
+
+            finishSend.observe(this@ChattingActivity, {
+                if(it)
+                {
+                    toast("전송성공")
+                    mAdapter.addItem(ChatModel(messageEdit.value.toString(), MyApplication.prefs.getUsername("myName", "")))
                     mAdapter.notifyDataSetChanged()
                 }
                 else{
                     toast("전송 실패")
                 }
-            })
-
-            finishReceiveMessage.observe(this@ChattingActivity, Observer {
-                mAdapter.addItem(ChatModel(receiveMessage, receiveUser))
-                mAdapter.notifyDataSetChanged()
             })
         }
     }
