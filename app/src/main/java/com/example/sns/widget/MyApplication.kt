@@ -7,7 +7,9 @@ import org.koin.core.context.startKoin
 
 class MyApplication : Application() {
 
-    companion object { lateinit var prefs: PreferenceUtil }
+    companion object {
+        lateinit var prefs: PreferenceUtil
+    }
 
     override fun onCreate() {
         prefs = PreferenceUtil(applicationContext)

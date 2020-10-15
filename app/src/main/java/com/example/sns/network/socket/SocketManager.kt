@@ -1,10 +1,9 @@
-package com.example.sns.viewModel
+package com.example.sns.network.socket
 
 import com.example.sns.model.ChatModel
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import org.json.JSONObject
-import retrofit2.Retrofit
 
 object SocketManager {
     private var socket: Socket? = null

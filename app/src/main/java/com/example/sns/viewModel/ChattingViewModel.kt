@@ -1,14 +1,13 @@
 package com.example.sns.viewModel
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.sns.base.BaseViewModel
 import com.example.sns.model.ChatModel
+import com.example.sns.network.socket.SocketListeners
+import com.example.sns.network.socket.SocketManager
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.SingleLiveEvent
-import com.github.nkzawa.emitter.Emitter
-import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -16,9 +15,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
-import java.lang.Exception
 
-class ChattingViewModel() : BaseViewModel(), SocketListeners{
+class ChattingViewModel() : BaseViewModel(), SocketListeners {
 
     var myEmail = MutableLiveData<String>()
     var targetEmail = MutableLiveData<String>()
@@ -36,7 +34,7 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners{
     var sendMessageBtn = SingleLiveEvent<Unit>()
     val itemList = MutableLiveData<ChatModel>()
 
-    lateinit var mSocket : Socket
+    lateinit var mSocket: Socket
 
     fun connect() {
         mSocket = SocketManager.getSocket()
@@ -59,7 +57,7 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners{
             jsonObject.put("room", MyApplication.prefs.getUsername("targetName", ""))
             jsonObject.put("message", messageEdit.value.toString())
         } catch (e: JSONException) {
-                e.printStackTrace()
+            e.printStackTrace()
         }
         mSocket.emit("message", jsonObject)
     }
@@ -93,8 +91,8 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners{
             MyApplication.prefs.setUsername("myName", myEmail.value.toString())
             MyApplication.prefs.setUsername("targetName", targetEmail.value.toString())
             Log.d("TAG", targetEmail.value.toString())
-            GlobalScope.launch{
-                withContext(Dispatchers.Main){
+            GlobalScope.launch {
+                withContext(Dispatchers.Main) {
                     finishUserConnect.value = true
                     Log.d("TAG", "room : ${finishUserConnect.value.toString()}")
                 }
@@ -109,7 +107,7 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners{
         if (success) {
             Log.d("TAG", "들어옴2")
             GlobalScope.launch {
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     finishSend.value = true
                     Log.d("TAG", "전송 : ${finishSend.value.toString()}")
                 }
@@ -117,7 +115,7 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners{
         } else {
             Log.d("TAG", "들어옴3")
             GlobalScope.launch {
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     finishSend.value = false
                 }
             }

@@ -21,11 +21,13 @@ class SingleLiveEvent<T> : MutableLiveData<T?>() {
             }
         })
     }
+
     @MainThread
     override fun setValue(@Nullable t: T?) {
         mPending.set(true)
         super.setValue(t)
     }
+
     /**
      * Used for cases where T is Void, to make calls cleaner.
      */
@@ -33,6 +35,7 @@ class SingleLiveEvent<T> : MutableLiveData<T?>() {
     fun call() {
         value = null
     }
+
     companion object {
         private const val TAG = "SingleLiveEvent"
     }

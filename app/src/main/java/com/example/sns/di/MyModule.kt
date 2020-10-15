@@ -1,6 +1,5 @@
 package com.example.sns.di
 
-import android.app.Application
 import com.example.sns.viewModel.*
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel

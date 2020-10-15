@@ -1,9 +1,8 @@
 package com.example.sns.viewModel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.sns.base.BaseViewModel
-import com.example.sns.retrofit.Dao
+import com.example.sns.network.retrofit.RetrofitService
 import com.example.sns.model.RegisterBody
 import com.example.sns.model.RegisterData
 import com.example.sns.widget.SingleLiveEvent
@@ -21,11 +20,11 @@ class RegisterViewModel : BaseViewModel(){
 
     var status = MutableLiveData<String>()
 
-    lateinit var myAPI : Dao
+    lateinit var myAPI : RetrofitService
     lateinit var retrofit: Retrofit
 
     fun register(){
-        myAPI = retrofit.create(Dao::class.java)
+        myAPI = retrofit.create(RetrofitService::class.java)
         myAPI.register(RegisterBody(username = name.value.toString(), email = email.value.toString(), password = password.value.toString()) ).enqueue(object :
             Callback<RegisterData> {
             override fun onFailure(call: Call<RegisterData>, t: Throwable) {

@@ -1,7 +1,6 @@
 package com.example.sns.view.activity
 
 import android.util.Log
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sns.R
 import com.example.sns.adapter.ChatAdapter
@@ -35,7 +34,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
     }
 
     override fun observerViewModel() {
-        with(viewModel){
+        with(viewModel) {
             sendMessageBtn.observe(this@ChattingActivity, {
                 sendMessage()
             })
@@ -47,14 +46,17 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
             })
 
             finishSend.observe(this@ChattingActivity, {
-                if(it)
-                {
+                if (it) {
                     toast("전송성공")
-                    mAdapter.addItem(ChatModel(messageEdit.value.toString(), MyApplication.prefs.getUsername("myName", "")))
+                    mAdapter.addItem(
+                        ChatModel(
+                            messageEdit.value.toString(),
+                            MyApplication.prefs.getUsername("myName", "")
+                        )
+                    )
                     mAdapter.notifyDataSetChanged()
                     editText2.setText("")
-                }
-                else{
+                } else {
                     toast("전송 실패")
                 }
             })

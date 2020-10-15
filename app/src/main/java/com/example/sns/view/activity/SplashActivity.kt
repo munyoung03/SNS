@@ -4,9 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sns.R
@@ -16,8 +13,6 @@ import com.example.sns.widget.extension.toast
 import com.facebook.AccessToken
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import java.security.MessageDigest
-import kotlin.math.log
 
 class SplashActivity : AppCompatActivity() {
 
@@ -39,10 +34,9 @@ class SplashActivity : AppCompatActivity() {
 
         checkPer = MyApplication.prefs.getCheckPermission("permission", false)
 
-        if(checkPer) {
+        if (checkPer) {
             login()
-        }
-        else{
+        } else {
             checkPermission()
         }
     }
@@ -51,25 +45,21 @@ class SplashActivity : AppCompatActivity() {
         if (checkLogin == "normal login") {
             toast("자동로그인 성공")
             startActivity(MainActivity::class.java)
-        } else if(checkLogin == "facebook login"){
+        } else if (checkLogin == "facebook login") {
             toast("자동로그인 성공")
             val accessToken = AccessToken.getCurrentAccessToken()
-            if(accessToken !== null)
-            {
+            if (accessToken !== null) {
                 startActivity(MainActivity::class.java)
-            }
-            else {
+            } else {
                 toast("세션 만료")
                 startActivity(LoginActivity::class.java)
             }
-        } else if(checkLogin == "google login"){
+        } else if (checkLogin == "google login") {
             toast("자동로그인 성공")
             val accessToken = GoogleSignIn.getLastSignedInAccount(this)
-            if(accessToken !== null)
-            {
+            if (accessToken !== null) {
                 startActivity(MainActivity::class.java)
-            }
-            else {
+            } else {
                 toast("세션 만료")
                 startActivity(LoginActivity::class.java)
             }

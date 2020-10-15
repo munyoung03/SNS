@@ -1,4 +1,4 @@
-package com.example.sns.retrofit
+package com.example.sns.network.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

@@ -9,18 +9,18 @@ class MyPageViewModel : BaseViewModel() {
     val logoutBtn = SingleLiveEvent<Unit>()
     val image = SingleLiveEvent<Unit>()
 
-    fun setData(){
+    fun setData() {
         MyApplication.prefs.setCheckLogin("checklogin", null)
         MyApplication.prefs.setUsername("name", null)
         MyApplication.prefs.setToken("token", null)
         MyApplication.prefs.setEmail("email", null)
     }
 
-    fun logoutBtnClick(){
+    fun logoutBtnClick() {
         logoutBtn.call()
     }
 
-    fun imageClick(){
+    fun imageClick() {
         image.call()
     }
 

@@ -1,8 +1,5 @@
 package com.example.sns.view.fragment
 
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.util.Base64
 import android.util.Log
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
@@ -11,10 +8,9 @@ import com.example.sns.viewModel.MainPageViewModel
 import com.example.sns.widget.extension.toast
 import com.google.firebase.iid.FirebaseInstanceId
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import java.security.MessageDigest
 
 
-class MainPageFragment : BaseFragment<FragmentMainpageBinding, MainPageViewModel>(){
+class MainPageFragment : BaseFragment<FragmentMainpageBinding, MainPageViewModel>() {
 
     override val viewModel: MainPageViewModel
         get() = getViewModel(MainPageViewModel::class)
@@ -26,12 +22,9 @@ class MainPageFragment : BaseFragment<FragmentMainpageBinding, MainPageViewModel
         //이 토큰이용하여 푸시보냄
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener {
-                if(!it.isSuccessful)
-                {
+                if (!it.isSuccessful) {
                     Log.d("TAG", "getInstanceId failed${it.exception}")
-                }
-                else
-                {
+                } else {
                     var token = it.result.token
                     Log.d("TAG", "내토큰 : $token")
                     toast(token)
@@ -40,7 +33,7 @@ class MainPageFragment : BaseFragment<FragmentMainpageBinding, MainPageViewModel
     }
 
     override fun observerViewModel() {
-        with(viewModel){
+        with(viewModel) {
 
         }
     }

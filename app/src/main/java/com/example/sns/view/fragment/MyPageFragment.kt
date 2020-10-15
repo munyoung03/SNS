@@ -11,7 +11,6 @@ import com.example.sns.viewModel.MyPageViewModel
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.startActivity
 import com.facebook.login.LoginManager
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_mypage.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -35,7 +34,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding, MyPageViewModel>() {
     }
 
     override fun observerViewModel() {
-        with(viewModel){
+        with(viewModel) {
             logoutBtn.observe(this@MyPageFragment, Observer {
                 FirebaseAuth.getInstance().signOut()
                 LoginManager.getInstance().logOut()
@@ -55,7 +54,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding, MyPageViewModel>() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE){
+        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             imageView.setImageURI(data?.data)
         }
     }

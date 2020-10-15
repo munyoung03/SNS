@@ -1,29 +1,17 @@
 package com.example.sns.view.fragment
 
-import android.content.SharedPreferences
-import android.os.Bundle
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentChattingBinding
 import com.example.sns.view.activity.ChattingActivity
-import com.example.sns.view.activity.MainActivity
 import com.example.sns.viewModel.ChattingViewModel
-import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.noFinishStartActivity
-import com.example.sns.widget.extension.startActivity
 import com.example.sns.widget.extension.toast
-import com.github.nkzawa.emitter.Emitter
-import com.github.nkzawa.socketio.client.IO
-import com.github.nkzawa.socketio.client.Socket
-import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.fragment_chatting.*
 import org.json.JSONException
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import java.lang.Exception
 
 class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel>() {
 
@@ -58,14 +46,10 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
 
             finishUserConnect.observe(this@ChattingFragment, Observer {
                 Log.d("TAG", it.toString())
-                if(it)
-                {
-
+                if (it) {
                     toast("입장")
                     noFinishStartActivity(ChattingActivity::class.java)
-                }
-                else
-                {
+                } else {
                     toast("실패")
                 }
             })

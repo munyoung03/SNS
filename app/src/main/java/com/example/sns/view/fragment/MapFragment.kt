@@ -1,12 +1,10 @@
 package com.example.sns.view.fragment
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.*
 import android.os.Bundle
 import android.provider.Settings
@@ -14,7 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentMapBinding
@@ -32,7 +29,7 @@ import java.io.IOException
 import java.util.*
 
 
-class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReadyCallback ,
+class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReadyCallback,
     LocationListener {
 
     private var locationManager: LocationManager? = null
@@ -49,7 +46,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
 
     override fun init() {
         //위치서비스 여부 확인
-        if(!viewModel.checkLocationServicesStatus())
+        if (!viewModel.checkLocationServicesStatus())
             showDialogForLocationServiceSetting()
     }
 
@@ -63,7 +60,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view:View? = super.onCreateView(inflater, container, savedInstanceState)
+        val view: View? = super.onCreateView(inflater, container, savedInstanceState)
         val mapView =
             view?.findViewById<View>(R.id.map) as MapView
         mapView.onCreate(savedInstanceState)
@@ -122,7 +119,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
     }
 
     override fun onLocationChanged(location: Location) {
-        if(view == null) return;
+        if (view == null) return;
 
         var latitude = location.latitude
         var longitude = location.longitude
@@ -130,7 +127,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
         Log.d("TAG", "위도 : $latitude, 경도 : $longitude")
         //주소 설정
         val address = getCurrentAddress(latitude, longitude)
-        if(address != null) {
+        if (address != null) {
             Log.d("TAG", address)
             address_text.text = address
         }

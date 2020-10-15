@@ -11,13 +11,17 @@ import com.example.sns.BR
 
 abstract class BaseFragment<VB : ViewDataBinding, VM : BaseViewModel> : Fragment() {
     protected lateinit var binding: VB
-    protected abstract val viewModel : VM
+    protected abstract val viewModel: VM
     protected abstract val layoutRes: Int
 
     protected abstract fun init()
     protected abstract fun observerViewModel()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)!!
         return binding.root
     }

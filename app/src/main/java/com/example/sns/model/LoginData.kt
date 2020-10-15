@@ -1,5 +1,5 @@
 package com.example.sns.model
 
 data class LoginData(
-    val token : String
+    val token: String
 )

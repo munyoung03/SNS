@@ -1,4 +1,4 @@
-package com.example.sns.viewModel
+package com.example.sns.network.socket
 
 import com.example.sns.model.ChatModel
 

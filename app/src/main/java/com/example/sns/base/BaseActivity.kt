@@ -7,11 +7,11 @@ import androidx.databinding.ViewDataBinding
 import com.example.sns.BR
 import com.example.sns.widget.extension.lightStatusBar
 
-abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity(){
-    protected lateinit var binding : VB
+abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
+    protected lateinit var binding: VB
 
-    protected abstract val viewModel : VM
-    protected abstract val layoutRes : Int
+    protected abstract val viewModel: VM
+    protected abstract val layoutRes: Int
 
     protected abstract fun init()
     protected abstract fun observerViewModel()
@@ -33,6 +33,6 @@ abstract class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel> : AppCompa
 
     override fun onDestroy() {
         super.onDestroy()
-        if(::binding.isInitialized) binding.unbind()
+        if (::binding.isInitialized) binding.unbind()
     }
 }
