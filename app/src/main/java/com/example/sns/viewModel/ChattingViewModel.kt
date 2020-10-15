@@ -70,6 +70,7 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners{
             withContext(Dispatchers.Main) {
                 itemList.value = model;
                 receiveUser = model.name
+                receiveUser = receiveUser.substring(0, receiveUser.length - 8)
                 receiveMessage = model.message
                 finishReceiveMessage.postValue(true)
                 Log.d("TAG", "user : $receiveUser\n message : $receiveMessage")

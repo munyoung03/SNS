@@ -50,9 +50,9 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                 if(it)
                 {
                     toast("전송성공")
-                    editText2.setText("")
                     mAdapter.addItem(ChatModel(messageEdit.value.toString(), MyApplication.prefs.getUsername("myName", "")))
                     mAdapter.notifyDataSetChanged()
+                    editText2.setText("")
                 }
                 else{
                     toast("전송 실패")

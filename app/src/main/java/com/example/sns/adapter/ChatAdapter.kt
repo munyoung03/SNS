@@ -40,6 +40,7 @@ class ChatAdapter(var arrayList: ArrayList<ChatModel>) : RecyclerView.Adapter<Re
         //onCreateViewHolder에서 리턴받은 뷰홀더가 Holder2라면 상대의 채팅, item_your_chat의 뷰들을 초기화 해줌
         else if(holder is Holder2) {
             holder.chat_Text.text = arrayList[position].message
+            holder.chat_name.text = arrayList[position].name
         }
     }
 
@@ -55,6 +56,7 @@ class ChatAdapter(var arrayList: ArrayList<ChatModel>) : RecyclerView.Adapter<Re
     //상대가친 채팅 뷰홀더
     inner class Holder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val chat_Text = itemView.findViewById<TextView>(R.id.chat_Text)
+        val chat_name = itemView.findViewById<TextView>(R.id.chat_You_Name)
     }
 
     override fun getItemViewType(position: Int): Int {//여기서 뷰타입을 1, 2로 바꿔서 지정해줘야 내채팅 너채팅을 바꾸면서 쌓을 수 있음
