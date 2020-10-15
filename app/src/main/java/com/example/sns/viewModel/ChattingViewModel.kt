@@ -64,6 +64,69 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners{
         mSocket.emit("message", jsonObject)
     }
 
+
+    override fun onMessageReceive(model: ChatModel) {
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                itemList.value = model;
+                receiveUser = model.name
+                receiveMessage = model.message
+                finishReceiveMessage.postValue(true)
+                Log.d("TAG", "user : $receiveUser\n message : $receiveMessage")
+            }
+        }
+    }
+
+    override fun onConnect() {
+        Log.d("TAG", "Connect!")
+    }
+
+    override fun onDisconnect() {
+        mSocket.disconnect()
+        Log.d("TAG", "Disconnect!")
+    }
+
+    override fun onUserConnect(success: Boolean) {
+        if (success) {
+            Log.d("TAG", "룸입장 성공")
+            MyApplication.prefs.setUsername("myName", myEmail.value.toString())
+            MyApplication.prefs.setUsername("targetName", targetEmail.value.toString())
+            Log.d("TAG", targetEmail.value.toString())
+            GlobalScope.launch{
+                withContext(Dispatchers.Main){
+                    finishUserConnect.value = true
+                    Log.d("TAG", "room : ${finishUserConnect.value.toString()}")
+                }
+            }
+
+        } else {
+            finishUserConnect.postValue(false)
+        }
+    }
+
+    override fun onUserSendMessage(success: Boolean) {
+        if (success) {
+            Log.d("TAG", "들어옴2")
+            GlobalScope.launch {
+                withContext(Dispatchers.Main){
+                    finishSend.value = true
+                    Log.d("TAG", "전송 : ${finishSend.value.toString()}")
+                }
+            }
+        } else {
+            Log.d("TAG", "들어옴3")
+            GlobalScope.launch {
+                withContext(Dispatchers.Main){
+                    finishSend.value = false
+                }
+            }
+        }
+    }
+
+}
+
+/*
+
     private var sendMessageResponse = Emitter.Listener { args->
         Log.d("TAG", "들어옴")
         val data = args[0] as JSONObject
@@ -131,60 +194,4 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners{
             e.printStackTrace()
         }
     }
-
-    override fun onMessageReceive(model: ChatModel) {
-        GlobalScope.launch {
-            withContext(Dispatchers.Main) {
-                itemList.value = model;
-                finishReceiveMessage.postValue(true)
-                Log.d("TAG", "user : $receiveUser\n message : $receiveMessage")
-            }
-        }
-    }
-
-    override fun onConnect() {
-        Log.d("TAG", "Connect!")
-    }
-
-    override fun onDisconnect() {
-        mSocket.disconnect()
-        Log.d("TAG", "Disconnect!")
-    }
-
-    override fun onUserConnect(success: Boolean) {
-        if (success) {
-            Log.d("TAG", "룸입장 성공")
-            MyApplication.prefs.setUsername("myName", myEmail.value.toString())
-            MyApplication.prefs.setUsername("targetName", targetEmail.value.toString())
-            GlobalScope.launch{
-                withContext(Dispatchers.Main){
-                    finishUserConnect.value = true
-                    Log.d("TAG", "room : ${finishUserConnect.value.toString()}")
-                }
-            }
-
-        } else {
-            finishUserConnect.postValue(false)
-        }
-    }
-
-    override fun onUserSendMessage(success: Boolean) {
-        if (success) {
-            Log.d("TAG", "들어옴2")
-            GlobalScope.launch {
-                withContext(Dispatchers.Main){
-                    finishSend.value = true
-                    Log.d("TAG", "전송 : ${finishSend.value.toString()}")
-                }
-            }
-        } else {
-            Log.d("TAG", "들어옴3")
-            GlobalScope.launch {
-                withContext(Dispatchers.Main){
-                    finishSend.value = false
-                }
-            }
-        }
-    }
-
-}
+ */

@@ -60,6 +60,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
                 Log.d("TAG", it.toString())
                 if(it)
                 {
+
                     toast("입장")
                     noFinishStartActivity(ChattingActivity::class.java)
                 }

@@ -23,7 +23,7 @@ object SocketManager {
                     val data = it[0] as JSONObject
                     val success: Boolean
                     success = data.getBoolean("success")
-                    observers.forEach { it.onUserConnect(success) }
+                    observers.forEach { it.onUserSendMessage(success) }
                 }
                 socket!!.on("user connect") {
 
@@ -53,6 +53,7 @@ object SocketManager {
         }
     }
     fun observe(listener : SocketListeners) {
-        observers.add(listener)
+        if(!observers.contains(listener))
+            observers.add(listener)
     }
 }
