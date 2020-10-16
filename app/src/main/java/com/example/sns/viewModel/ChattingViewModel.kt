@@ -9,10 +9,6 @@ import com.example.sns.network.socket.SocketManager
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.SingleLiveEvent
 import com.github.nkzawa.socketio.client.Socket
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -64,16 +60,14 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
 
 
     override fun onMessageReceive(model: ChatModel) {
-        GlobalScope.launch {
-            withContext(Dispatchers.Main) {
-                itemList.value = model;
-                receiveUser = model.name
-                receiveUser = receiveUser.substring(0, receiveUser.length - 8)
-                receiveMessage = model.message
-                finishReceiveMessage.postValue(true)
-                Log.d("TAG", "user : $receiveUser\n message : $receiveMessage")
-            }
-        }
+
+        itemList.value = model;
+        receiveUser = model.name
+        receiveUser = receiveUser.substring(0, receiveUser.length - 8)
+        receiveMessage = model.message
+        finishReceiveMessage.postValue(true)
+        Log.d("TAG", "user : $receiveUser\n message : $receiveMessage")
+
     }
 
     override fun onConnect() {
@@ -91,34 +85,20 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
             MyApplication.prefs.setUsername("myName", myEmail.value.toString())
             MyApplication.prefs.setUsername("targetName", targetEmail.value.toString())
             Log.d("TAG", targetEmail.value.toString())
-            GlobalScope.launch {
-                withContext(Dispatchers.Main) {
-                    finishUserConnect.value = true
-                    Log.d("TAG", "room : ${finishUserConnect.value.toString()}")
-                }
-            }
-
+            finishUserConnect.value = true
         } else {
-            finishUserConnect.postValue(false)
+            finishUserConnect.value = false
         }
     }
 
     override fun onUserSendMessage(success: Boolean) {
         if (success) {
             Log.d("TAG", "들어옴2")
-            GlobalScope.launch {
-                withContext(Dispatchers.Main) {
-                    finishSend.value = true
-                    Log.d("TAG", "전송 : ${finishSend.value.toString()}")
-                }
-            }
+            finishSend.value = true
+            Log.d("TAG", "전송 : ${finishSend.value.toString()}")
         } else {
             Log.d("TAG", "들어옴3")
-            GlobalScope.launch {
-                withContext(Dispatchers.Main) {
-                    finishSend.value = false
-                }
-            }
+            finishSend.value = false
         }
     }
 

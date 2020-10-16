@@ -3,6 +3,10 @@ package com.example.sns.network.socket
 import com.example.sns.model.ChatModel
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 object SocketManager {
@@ -15,21 +19,40 @@ object SocketManager {
                 socket = IO.socket("http://192.168.10.163:8080");
                 socket!!.on(Socket.EVENT_CONNECT) {
                     for (observer in observers) {
-                        observer.onConnect()
+                        GlobalScope.launch {
+                            withContext(Dispatchers.Main)
+                            {
+                                observer.onConnect()
+                            }
+                        }
                     }
                 }
                 socket!!.on("send message") { it ->
                     val data = it[0] as JSONObject
                     val success: Boolean
                     success = data.getBoolean("success")
-                    observers.forEach { it.onUserSendMessage(success) }
+                    observers.forEach {
+                        GlobalScope.launch {
+                            withContext(Dispatchers.Main)
+                            {
+                                it.onUserSendMessage(success)
+                            }
+                        }
+                    }
                 }
                 socket!!.on("user connect") {
 
                     val data = it[0] as JSONObject
                     val success: Boolean
                     success = data.getBoolean("success")
-                    observers.forEach { it.onUserConnect(success) }
+                    observers.forEach {
+                        GlobalScope.launch {
+                            withContext(Dispatchers.Main)
+                            {
+                                it.onUserConnect(success)
+                            }
+                        }
+                    }
                 }
                 socket!!.on("message") { args ->
                     val data = args[0] as JSONObject
@@ -38,7 +61,12 @@ object SocketManager {
                     val receiveMessage = data.getString("message")
                     val receiveUser = data.getString("user")
                     observers.forEach {
-                        it.onMessageReceive(ChatModel(receiveMessage, receiveUser))
+                        GlobalScope.launch {
+                            withContext(Dispatchers.Main)
+                            {
+                                it.onMessageReceive(ChatModel(receiveMessage, receiveUser))
+                            }
+                        }
                     }
                 }
                 socket!!.on(Socket.EVENT_DISCONNECT) {
@@ -51,8 +79,9 @@ object SocketManager {
             return socket!!;
         }
     }
-    fun observe(listener : SocketListeners) {
-        if(!observers.contains(listener))
+
+    fun observe(listener: SocketListeners) {
+        if (!observers.contains(listener))
             observers.add(listener)
     }
 }
