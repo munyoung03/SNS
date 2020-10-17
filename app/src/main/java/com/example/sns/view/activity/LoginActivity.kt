@@ -65,7 +65,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             })
 
             status.observe(this@LoginActivity, Observer {
-                if (status.value == "200") {
+                if (it == "200") {
                     if (check_login.isChecked) {
                         MyApplication.prefs.setCheckLogin("checklogin", "normal login")
                     }
@@ -111,11 +111,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                         }
 
                         override fun onCancel() {
-                            TODO("Not yet implemented")
                         }
 
                         override fun onError(error: FacebookException?) {
-                            TODO("Not yet implemented")
                         }
 
                     })

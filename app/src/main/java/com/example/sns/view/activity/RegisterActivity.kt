@@ -29,7 +29,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
                 register()
             })
             status.observe(this@RegisterActivity, Observer {
-                if (status.value == "200") {
+                if (it == "200") {
                     Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
                     startActivity(LoginActivity::class.java)
                 } else {
