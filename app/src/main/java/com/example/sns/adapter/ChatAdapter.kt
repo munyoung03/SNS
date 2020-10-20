@@ -7,12 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sns.R
 import com.example.sns.model.ChatModel
+import com.example.sns.room.ChatDataBase
 import com.example.sns.widget.MyApplication
 
-class ChatAdapter(var arrayList: ArrayList<ChatModel>) :
+class ChatAdapter(var arrayList: ArrayList<ChatDataBase>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    fun addItem(item: ChatModel) {//아이템 추가
+    fun addItem(item: ChatDataBase) {//아이템 추가
         arrayList.add(item)
     }
 
@@ -37,7 +38,7 @@ class ChatAdapter(var arrayList: ArrayList<ChatModel>) :
         //onCreateViewHolder에서 리턴받은 뷰홀더가 Holder2라면 상대의 채팅, item_your_chat의 뷰들을 초기화 해줌
         else if (holder is Holder2) {
             holder.chat_Text.text = arrayList[position].message
-            holder.chat_name.text = arrayList[position].name
+            holder.chat_name.text = arrayList[position].sender
         }
     }
 
@@ -59,7 +60,7 @@ class ChatAdapter(var arrayList: ArrayList<ChatModel>) :
     override fun getItemViewType(position: Int): Int {//여기서 뷰타입을 1, 2로 바꿔서 지정해줘야 내채팅 너채팅을 바꾸면서 쌓을 수 있음
 
         //내 아이디와 arraylist의 name이 같다면 내꺼 아니면 상대꺼
-        return if (arrayList[position].name == MyApplication.prefs.getUsername("myName", "")) {
+        return if (arrayList[position].sender == MyApplication.prefs.getUsername("myName", "")) {
             1
         } else {
             2

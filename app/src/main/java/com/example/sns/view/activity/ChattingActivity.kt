@@ -8,6 +8,8 @@ import com.example.sns.adapter.ChatAdapter
 import com.example.sns.base.BaseActivity
 import com.example.sns.databinding.ActivityChattingBinding
 import com.example.sns.model.ChatModel
+import com.example.sns.room.ChatDataBase
+import com.example.sns.room.DataBase
 import com.example.sns.viewModel.ChattingViewModel
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.toast
@@ -16,8 +18,9 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel>() {
 
-    var arrayList = arrayListOf<ChatModel>()
+    var arrayList = arrayListOf<ChatDataBase>()
     val mAdapter = ChatAdapter(arrayList)
+    var chatDb : DataBase? = null
 
     override val viewModel: ChattingViewModel
         get() = getViewModel(ChattingViewModel::class)
@@ -27,10 +30,22 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
 
     override fun init() {
         viewModel.connect()
+        chatDb = DataBase.getInstance(this)
         chat_recyclerview.adapter = mAdapter
         //레이아웃 매니저 선언
         chat_recyclerview.layoutManager = LinearLayoutManager(this)
-        chat_recyclerview.setHasFixedSize(true)//아이템이 추가삭제될때 크기측면에서 오류 안나게 해줌
+        chat_recyclerview.setHasFixedSize(true)//아이템이 추가삭제될때 크기측면에서 오류 안나게 해줌]
+
+        arrayList.clear()
+
+        arrayList.addAll(
+            chatDb?.dao()?.getMessage(
+                sender = MyApplication.prefs.getUsername("targetName", ""),
+                receiver = MyApplication.prefs.getUsername("myname", "")
+            ) as ArrayList<ChatDataBase>
+        )
+
+        mAdapter.notifyDataSetChanged()
 
     }
 
@@ -42,7 +57,11 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
 
             finishReceiveMessage.observe(this@ChattingActivity) {
                 Log.d("TAG", "SUC")
-                mAdapter.addItem(ChatModel(receiveMessage, receiveUser))
+                mAdapter.addItem(ChatDataBase(
+                    id = 0,
+                    message = receiveMessage,
+                    receiver =
+                ))
                 mAdapter.notifyDataSetChanged()
             }
 

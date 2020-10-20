@@ -8,6 +8,7 @@ import com.example.sns.model.ChatModel
 @Entity(tableName = "chat")
 class ChatDataBase (
     @PrimaryKey(autoGenerate = true) var id: Long,
+    @ColumnInfo(name = "sender") var sender : String,
     @ColumnInfo(name = "receiver") var receiver : String,
-    @ColumnInfo(name = "message") var message : ArrayList<ChatModel>
+    @ColumnInfo(name = "message") var message : String
 )
