@@ -1,6 +1,7 @@
 package com.example.sns.view.activity
 
 import android.util.Log
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sns.R
 import com.example.sns.adapter.ChatAdapter
@@ -35,31 +36,31 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
 
     override fun observerViewModel() {
         with(viewModel) {
-            sendMessageBtn.observe(this@ChattingActivity, {
+            sendMessageBtn.observe(this@ChattingActivity) {
                 sendMessage()
-            })
+            }
 
-            finishReceiveMessage.observe(this@ChattingActivity, {
+            finishReceiveMessage.observe(this@ChattingActivity) {
                 Log.d("TAG", "SUC")
                 mAdapter.addItem(ChatModel(receiveMessage, receiveUser))
                 mAdapter.notifyDataSetChanged()
-            })
+            }
 
-            finishSend.observe(this@ChattingActivity, {
+            finishSend.observe(this@ChattingActivity) {
                 if (it) {
                     toast("전송성공")
                     mAdapter.addItem(
-                        ChatModel(
-                            messageEdit.value.toString(),
-                            MyApplication.prefs.getUsername("myName", "")
-                        )
+                            ChatModel(
+                                    messageEdit.value.toString(),
+                                    MyApplication.prefs.getUsername("myName", "")
+                            )
                     )
                     mAdapter.notifyDataSetChanged()
                     editText2.setText("")
                 } else {
                     toast("전송 실패")
                 }
-            })
+            }
         }
     }
 }
