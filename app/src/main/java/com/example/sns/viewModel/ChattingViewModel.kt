@@ -20,7 +20,7 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
 
     var sender: String = ""
     var receiveMessage: String = ""
-    var receiveDate: String = ""
+    var receiveDate: Long = 0
 
     var finishSend = MutableLiveData<Boolean>()
     var finishUserConnect = MutableLiveData<Boolean>()
@@ -37,6 +37,8 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
         mSocket = SocketManager.getSocket()
         SocketManager.connectSocket()
         SocketManager.observe( this)
+
+
     }
 
 

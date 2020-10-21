@@ -10,6 +10,9 @@ interface Dao {
     @Query("SELECT * FROM chat where (sender = :sender and receiver = :receiver) or (sender = :receiver and receiver = :sender)")
     fun getMessage(sender : String, receiver: String) : List<ChatDataBase>
 
+    @Query("SELECT * FROM chat group by sender order by time")
+    fun getRecentMessage() : List<ChatDataBase>
+
     @Insert
     fun insert(chatDataBase: ChatDataBase)
 

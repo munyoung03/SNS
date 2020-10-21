@@ -12,5 +12,5 @@ class ChatDataBase(
     @ColumnInfo(name = "sender") var sender: String,
     @ColumnInfo(name = "receiver") var receiver: String,
     @ColumnInfo(name = "message") var message: String,
-    @ColumnInfo(name = "time") var time: String
+    @ColumnInfo(name = "time") var time: Long
 )

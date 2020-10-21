@@ -60,7 +60,7 @@ object SocketManager {
                 socket!!.on("message") { args ->
                     val data = args[0] as JSONObject
 
-                    val receiveDate = data.getString("when")
+                    val receiveDate = data.getLong("when")
                     val receiveMessage = data.getString("message")
                     val sender = data.getString("user")
                     observers.forEach {

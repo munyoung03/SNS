@@ -15,6 +15,8 @@ import com.example.sns.widget.extension.toast
 import kotlinx.android.synthetic.main.activity_chatting.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel>() {
 
@@ -44,7 +46,9 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                 receiver = MyApplication.prefs.getUsername("myName", "")
             ) as ArrayList<ChatDataBase>
         )
-
+        chatDb?.dao()?.getRecentMessage()?.forEach {
+            Log.d("TAG", "${it.sender}, ${it.message}")
+        }
         mAdapter.notifyDataSetChanged()
 
     }
@@ -88,7 +92,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                                 message = editText2.text.toString().trim(),
                                 receiver = MyApplication.prefs.getUsername("targetName", ""),
                                 sender = MyApplication.prefs.getUsername("myName", ""),
-                                time = LocalDate.now().toString()
+                                time = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
                             ))
 
                     chatDb?.dao()?.insert(ChatDataBase(
@@ -96,7 +100,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                         message = editText2.text.toString().trim(),
                         receiver = MyApplication.prefs.getUsername("targetName", ""),
                         sender = MyApplication.prefs.getUsername("myName", ""),
-                        time = LocalDate.now().toString()
+                        time = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
                     ))
                     
                     Log.d("TAG", "receiver : ${MyApplication.prefs.getUsername("targetName", "")}")
