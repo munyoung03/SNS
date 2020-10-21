@@ -1,5 +1,6 @@
 package com.example.sns.network.socket
 
+import android.util.Log
 import com.example.sns.model.ChatModel
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
@@ -15,8 +16,10 @@ object SocketManager {
     private var observers: ArrayList<SocketListeners> = arrayListOf()
     fun getSocket(): Socket {
         synchronized(this) {
+            Log.d("TAG", socket.toString())
             if (socket == null) {
-                socket = IO.socket("http://192.168.10.163:8080");
+                Log.d("TAG", "asdf")
+                socket = IO.socket("http://192.168.10.182:8080");
                 socket!!.on(Socket.EVENT_CONNECT) {
                     for (observer in observers) {
                         GlobalScope.launch {
@@ -59,12 +62,12 @@ object SocketManager {
 
                     val receiveDate = data.getString("when")
                     val receiveMessage = data.getString("message")
-                    val receiveUser = data.getString("user")
+                    val sender = data.getString("user")
                     observers.forEach {
                         GlobalScope.launch {
                             withContext(Dispatchers.Main)
                             {
-                                it.onMessageReceive(ChatModel(receiveMessage, receiveUser))
+                                it.onMessageReceive(ChatModel(receiveMessage, sender, receiveDate))
                             }
                         }
                     }
@@ -83,5 +86,14 @@ object SocketManager {
     fun observe(listener: SocketListeners) {
         if (!observers.contains(listener))
             observers.add(listener)
+    }
+
+    fun closeSocket(){
+        socket?.let {
+            socket = null
+            it.disconnect()
+            Log.d("TAG", "socket : "+socket.toString())
+            observers.clear()
+        }
     }
 }

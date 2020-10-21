@@ -8,6 +8,7 @@ import com.example.sns.adapter.ChatAdapter
 import com.example.sns.base.BaseActivity
 import com.example.sns.databinding.ActivityChattingBinding
 import com.example.sns.model.ChatModel
+import com.example.sns.network.socket.SocketManager
 import com.example.sns.room.ChatDataBase
 import com.example.sns.room.DataBase
 import com.example.sns.viewModel.ChattingViewModel
@@ -27,6 +28,11 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
 
     override val layoutRes: Int
         get() = R.layout.activity_chatting
+
+    override fun onDestroy() {
+        SocketManager.closeSocket()
+        super.onDestroy()
+    }
 
     override fun init() {
         viewModel.connect()
@@ -60,20 +66,40 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                 mAdapter.addItem(ChatDataBase(
                     id = 0,
                     message = receiveMessage,
-                    receiver =
+                    receiver = MyApplication.prefs.getUsername("myname", ""),
+                    sender = sender
                 ))
+
+                chatDb?.dao()?.insert(ChatDataBase(
+                        id = 0,
+                        message = receiveMessage,
+                        receiver = MyApplication.prefs.getUsername("myname", ""),
+                        sender = sender
+                ))
+
                 mAdapter.notifyDataSetChanged()
             }
 
             finishSend.observe(this@ChattingActivity) {
                 if (it) {
                     toast("전송성공")
-                    mAdapter.addItem(
-                            ChatModel(
-                                    messageEdit.value.toString(),
-                                    MyApplication.prefs.getUsername("myName", "")
-                            )
-                    )
+                    mAdapter.addItem(ChatDataBase(
+                                id = 0,
+                                message = editText2.text.toString().trim(),
+                                receiver = MyApplication.prefs.getUsername("targetName", ""),
+                                sender = MyApplication.prefs.getUsername("myName", "")
+                            ))
+
+                    chatDb?.dao()?.insert(ChatDataBase(
+                        id = 0,
+                        message = editText2.text.toString().trim(),
+                        receiver = MyApplication.prefs.getUsername("targetName", ""),
+                        sender = MyApplication.prefs.getUsername("myName", "")
+                    ))
+                    
+                    Log.d("TAG", "receiver : ${MyApplication.prefs.getUsername("targetName", "")}")
+                    Log.d("TAG", "sender : ${MyApplication.prefs.getUsername("myName", "")}")
+
                     mAdapter.notifyDataSetChanged()
                     editText2.setText("")
                 } else {

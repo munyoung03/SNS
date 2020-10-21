@@ -8,11 +8,9 @@ import com.example.sns.model.ChatModel
 @Dao
 interface Dao {
     @Query("SELECT * FROM chat where sender = :sender or receiver = :receiver and sender = :receiver or receiver = :sender")
-    fun getMessage(sender : String, receiver: String) : ArrayList<ChatDataBase>
+    fun getMessage(sender : String, receiver: String) : List<ChatDataBase>
 
     @Insert
     fun insert(chatDataBase: ChatDataBase)
 
-    @Query("DROP TABLE chat")
-    fun delete()
 }

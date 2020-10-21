@@ -2,6 +2,7 @@ package com.example.sns.view.fragment
 
 import android.util.Log
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentChattingBinding
@@ -23,6 +24,17 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         get() = R.layout.fragment_chatting
 
     override fun init() {
+
+    }
+
+    override fun onPause() {
+        Log.d("TAG", "Pause")
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("TAG", "Resume")
         viewModel.connect()
     }
 
@@ -30,7 +42,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         with(viewModel) {
 
             //버튼 클릭시 emit을 통해 서버에 같은 이벤트 이름을 가진 socket.on으로 jsonObject를 날림
-            joinRoomBtn.observe(this@ChattingFragment, {
+            joinRoomBtn.observe(this@ChattingFragment) {
                 Log.d("TAG", "버튼 클릭 성공")
                 val jsonObject = JSONObject()
                 try {
@@ -42,7 +54,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
                 }
                 mSocket.emit("user connect", jsonObject)
 
-            })
+            }
 
             finishUserConnect.observe(this@ChattingFragment, Observer {
                 Log.d("TAG", it.toString())

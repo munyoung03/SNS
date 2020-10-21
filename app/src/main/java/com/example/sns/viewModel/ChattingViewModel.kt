@@ -18,7 +18,7 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     var targetEmail = MutableLiveData<String>()
     var messageEdit = MutableLiveData<String>()
 
-    var receiveUser: String = ""
+    var sender: String = ""
     var receiveMessage: String = ""
     var receiveDate: String = ""
 
@@ -33,6 +33,7 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     lateinit var mSocket: Socket
 
     fun connect() {
+        Log.d("TAG", "connect")
         mSocket = SocketManager.getSocket()
 
         SocketManager.observe(this)
@@ -62,11 +63,12 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     override fun onMessageReceive(model: ChatModel) {
 
         itemList.value = model;
-        receiveUser = model.name
-        receiveUser = receiveUser.substring(0, receiveUser.length - 8)
+        sender = model.name
+        sender = sender.substring(0, sender.length - 8)
         receiveMessage = model.message
+        receiveDate = model.date
         finishReceiveMessage.value = true
-        Log.d("TAG", "user : $receiveUser\n message : $receiveMessage")
+        Log.d("TAG", "user : $sender\n message : $receiveMessage")
 
     }
 
