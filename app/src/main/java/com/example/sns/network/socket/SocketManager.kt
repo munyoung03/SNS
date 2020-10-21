@@ -15,7 +15,7 @@ object SocketManager {
 
     private var observers: ArrayList<SocketListeners> = arrayListOf()
     fun getSocket(): Socket {
-        synchronized(this) {
+        synchronized(SocketManager::class) {
             Log.d("TAG", socket.toString())
             if (socket == null) {
                 Log.d("TAG", "asdf")
@@ -88,12 +88,14 @@ object SocketManager {
             observers.add(listener)
     }
 
-    fun closeSocket(){
-        socket?.let {
-            socket = null
-            it.disconnect()
-            Log.d("TAG", "socket : "+socket.toString())
+    fun closeSocket() {
+        synchronized(SocketManager::class) {
+            socket?.disconnect()
+            Log.d("TAG", "socket : " + socket.toString())
             observers.clear()
         }
+    }
+    fun connectSocket() {
+        socket?.connect()
     }
 }

@@ -30,13 +30,13 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     var sendMessageBtn = SingleLiveEvent<Unit>()
     val itemList = MutableLiveData<ChatModel>()
 
-    lateinit var mSocket: Socket
+    var mSocket: Socket? = null
 
     fun connect() {
         Log.d("TAG", "connect")
         mSocket = SocketManager.getSocket()
-
-        SocketManager.observe(this)
+        SocketManager.connectSocket()
+        SocketManager.observe( this)
     }
 
 
@@ -56,7 +56,7 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        mSocket.emit("message", jsonObject)
+        mSocket?.emit("message", jsonObject)
     }
 
 
@@ -77,7 +77,6 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     }
 
     override fun onDisconnect() {
-        mSocket.disconnect()
         Log.d("TAG", "Disconnect!")
     }
 

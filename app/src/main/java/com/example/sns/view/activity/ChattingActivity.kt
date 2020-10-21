@@ -7,8 +7,6 @@ import com.example.sns.R
 import com.example.sns.adapter.ChatAdapter
 import com.example.sns.base.BaseActivity
 import com.example.sns.databinding.ActivityChattingBinding
-import com.example.sns.model.ChatModel
-import com.example.sns.network.socket.SocketManager
 import com.example.sns.room.ChatDataBase
 import com.example.sns.room.DataBase
 import com.example.sns.viewModel.ChattingViewModel
@@ -16,6 +14,7 @@ import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.toast
 import kotlinx.android.synthetic.main.activity_chatting.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import java.time.LocalDate
 
 class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel>() {
 
@@ -28,11 +27,6 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
 
     override val layoutRes: Int
         get() = R.layout.activity_chatting
-
-    override fun onDestroy() {
-        SocketManager.closeSocket()
-        super.onDestroy()
-    }
 
     override fun init() {
         viewModel.connect()
@@ -47,7 +41,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
         arrayList.addAll(
             chatDb?.dao()?.getMessage(
                 sender = MyApplication.prefs.getUsername("targetName", ""),
-                receiver = MyApplication.prefs.getUsername("myname", "")
+                receiver = MyApplication.prefs.getUsername("myName", "")
             ) as ArrayList<ChatDataBase>
         )
 
@@ -58,7 +52,11 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
     override fun observerViewModel() {
         with(viewModel) {
             sendMessageBtn.observe(this@ChattingActivity) {
-                sendMessage()
+                if(editText2.text.isNotEmpty())
+                {
+                    sendMessage()
+                }
+
             }
 
             finishReceiveMessage.observe(this@ChattingActivity) {
@@ -66,15 +64,17 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                 mAdapter.addItem(ChatDataBase(
                     id = 0,
                     message = receiveMessage,
-                    receiver = MyApplication.prefs.getUsername("myname", ""),
-                    sender = sender
+                    receiver = MyApplication.prefs.getUsername("myName", ""),
+                    sender = sender,
+                    time = receiveDate
                 ))
 
                 chatDb?.dao()?.insert(ChatDataBase(
                         id = 0,
                         message = receiveMessage,
-                        receiver = MyApplication.prefs.getUsername("myname", ""),
-                        sender = sender
+                        receiver = MyApplication.prefs.getUsername("myName", ""),
+                        sender = sender,
+                        time = receiveDate
                 ))
 
                 mAdapter.notifyDataSetChanged()
@@ -87,14 +87,16 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                                 id = 0,
                                 message = editText2.text.toString().trim(),
                                 receiver = MyApplication.prefs.getUsername("targetName", ""),
-                                sender = MyApplication.prefs.getUsername("myName", "")
+                                sender = MyApplication.prefs.getUsername("myName", ""),
+                                time = LocalDate.now().toString()
                             ))
 
                     chatDb?.dao()?.insert(ChatDataBase(
                         id = 0,
                         message = editText2.text.toString().trim(),
                         receiver = MyApplication.prefs.getUsername("targetName", ""),
-                        sender = MyApplication.prefs.getUsername("myName", "")
+                        sender = MyApplication.prefs.getUsername("myName", ""),
+                        time = LocalDate.now().toString()
                     ))
                     
                     Log.d("TAG", "receiver : ${MyApplication.prefs.getUsername("targetName", "")}")

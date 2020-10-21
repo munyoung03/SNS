@@ -6,6 +6,7 @@ import androidx.lifecycle.observe
 import com.example.sns.R
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentChattingBinding
+import com.example.sns.network.socket.SocketManager
 import com.example.sns.view.activity.ChattingActivity
 import com.example.sns.viewModel.ChattingViewModel
 import com.example.sns.widget.extension.noFinishStartActivity
@@ -24,7 +25,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         get() = R.layout.fragment_chatting
 
     override fun init() {
-
     }
 
     override fun onPause() {
@@ -35,6 +35,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
     override fun onResume() {
         super.onResume()
         Log.d("TAG", "Resume")
+        SocketManager.closeSocket()
         viewModel.connect()
     }
 
@@ -52,7 +53,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
                     Log.d("TAG", "캐치")
                     e.printStackTrace()
                 }
-                mSocket.emit("user connect", jsonObject)
+                mSocket?.emit("user connect", jsonObject)
 
             }
 
