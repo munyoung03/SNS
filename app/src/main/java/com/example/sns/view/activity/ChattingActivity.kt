@@ -46,8 +46,8 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                 receiver = MyApplication.prefs.getUsername("myName", "")
             ) as ArrayList<ChatDataBase>
         )
-        chatDb?.dao()?.getRecentMessage()?.forEach {
-            Log.d("TAG", "${it.sender}, ${it.message}")
+        chatDb?.dao()?.getRecentMessage(MyApplication.prefs.getUsername("myName", ""))?.forEach {
+            Log.d("TAG", "${it.receiver}, ${it.message}")
         }
         mAdapter.notifyDataSetChanged()
 

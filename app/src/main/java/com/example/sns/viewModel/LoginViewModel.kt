@@ -42,6 +42,7 @@ class LoginViewModel : BaseViewModel() {
                     Log.d("TAG", "메시지 : ${response.message()}")
                     Log.d("TAG", "이유 : ${response.errorBody()?.string().toString()}")
                     MyApplication.prefs.setToken("token", response.body()?.token.toString())
+                    MyApplication.prefs.setUsername("myName", email.value.toString())
                 }
             })
     }
