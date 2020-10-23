@@ -25,11 +25,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         get() = R.layout.fragment_chatting
 
     override fun init() {
-    }
 
-    override fun onPause() {
-        Log.d("TAG", "Pause")
-        super.onPause()
     }
 
     override fun onResume() {
@@ -44,17 +40,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
 
             //버튼 클릭시 emit을 통해 서버에 같은 이벤트 이름을 가진 socket.on으로 jsonObject를 날림
             joinRoomBtn.observe(this@ChattingFragment) {
-                Log.d("TAG", "버튼 클릭 성공")
-                val jsonObject = JSONObject()
-                try {
-                    jsonObject.put("id", myEmail.value)
-                    Log.d("TAG", myEmail.value.toString())
-                } catch (e: JSONException) {
-                    Log.d("TAG", "캐치")
-                    e.printStackTrace()
-                }
-                mSocket?.emit("user connect", jsonObject)
-
+                tryRoomConnect()
             }
 
             finishUserConnect.observe(this@ChattingFragment, Observer {

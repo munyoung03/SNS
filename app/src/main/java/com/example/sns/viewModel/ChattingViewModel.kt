@@ -61,6 +61,18 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
         mSocket?.emit("message", jsonObject)
     }
 
+    fun tryRoomConnect(){
+        Log.d("TAG", "버튼 클릭 성공")
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("id", myEmail.value)
+            Log.d("TAG", myEmail.value.toString())
+        } catch (e: JSONException) {
+            Log.d("TAG", "캐치")
+            e.printStackTrace()
+        }
+        mSocket?.emit("user connect", jsonObject)
+    }
 
     override fun onMessageReceive(model: ChatModel) {
 
