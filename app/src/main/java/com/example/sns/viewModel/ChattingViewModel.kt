@@ -2,10 +2,13 @@ package com.example.sns.viewModel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.example.sns.adapter.ChatAdapter
 import com.example.sns.base.BaseViewModel
 import com.example.sns.model.ChatModel
 import com.example.sns.network.socket.SocketListeners
 import com.example.sns.network.socket.SocketManager
+import com.example.sns.room.ChatDataBase
+import com.example.sns.room.DataBase
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.SingleLiveEvent
 import com.github.nkzawa.socketio.client.Socket
@@ -26,11 +29,14 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     var finishUserConnect = MutableLiveData<Boolean>()
     var finishReceiveMessage = MutableLiveData<Boolean>()
 
-    var joinRoomBtn = SingleLiveEvent<Unit>()
     var sendMessageBtn = SingleLiveEvent<Unit>()
     val itemList = MutableLiveData<ChatModel>()
 
     var mSocket: Socket? = null
+
+    var arrayList = arrayListOf<ChatDataBase>()
+    val mAdapter = ChatAdapter(arrayList)
+    var chatDb : DataBase? = null
 
     fun connect() {
         Log.d("TAG", "connect")
@@ -39,11 +45,6 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
         SocketManager.observe( this)
 
 
-    }
-
-
-    fun joinRoomBtnClick() {
-        joinRoomBtn.call()
     }
 
     fun sendMessageBtnClick() {
@@ -97,7 +98,6 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     override fun onUserConnect(success: Boolean) {
         if (success) {
             Log.d("TAG", "룸입장 성공")
-            MyApplication.prefs.setUsername("myName", myEmail.value.toString())
             MyApplication.prefs.setUsername("targetName", targetEmail.value.toString())
             Log.d("TAG", targetEmail.value.toString())
             finishUserConnect.value = true

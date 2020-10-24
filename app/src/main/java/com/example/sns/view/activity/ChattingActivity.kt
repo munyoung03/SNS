@@ -20,9 +20,7 @@ import java.time.ZoneOffset
 
 class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel>() {
 
-    var arrayList = arrayListOf<ChatDataBase>()
-    val mAdapter = ChatAdapter(arrayList)
-    var chatDb : DataBase? = null
+
 
     override val viewModel: ChattingViewModel
         get() = getViewModel(ChattingViewModel::class)
@@ -32,24 +30,24 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
 
     override fun init() {
         viewModel.connect()
-        chatDb = DataBase.getInstance(this)
-        chat_recyclerview.adapter = mAdapter
+        viewModel.chatDb = DataBase.getInstance(this)
+        chat_recyclerview.adapter = viewModel.mAdapter
         //레이아웃 매니저 선언
         chat_recyclerview.layoutManager = LinearLayoutManager(this)
         chat_recyclerview.setHasFixedSize(true)//아이템이 추가삭제될때 크기측면에서 오류 안나게 해줌]
 
-        arrayList.clear()
+        viewModel.arrayList.clear()
 
-        arrayList.addAll(
-            chatDb?.dao()?.getMessage(
+        viewModel.arrayList.addAll(
+            viewModel.chatDb?.dao()?.getMessage(
                 sender = MyApplication.prefs.getUsername("targetName", ""),
                 receiver = MyApplication.prefs.getUsername("myName", "")
             ) as ArrayList<ChatDataBase>
         )
-        chatDb?.dao()?.getRecentMessage(MyApplication.prefs.getUsername("myName", ""))?.forEach {
+        viewModel.chatDb?.dao()?.getRecentMessage(MyApplication.prefs.getUsername("myName", ""))?.forEach {
             Log.d("TAG", "${it.receiver}, ${it.message}")
         }
-        mAdapter.notifyDataSetChanged()
+        viewModel.mAdapter.notifyDataSetChanged()
 
     }
 

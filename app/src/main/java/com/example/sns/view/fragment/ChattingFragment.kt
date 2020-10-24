@@ -25,7 +25,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         get() = R.layout.fragment_chatting
 
     override fun init() {
-
+        
     }
 
     override fun onResume() {
@@ -39,9 +39,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         with(viewModel) {
 
             //버튼 클릭시 emit을 통해 서버에 같은 이벤트 이름을 가진 socket.on으로 jsonObject를 날림
-            joinRoomBtn.observe(this@ChattingFragment) {
-                tryRoomConnect()
-            }
 
             finishUserConnect.observe(this@ChattingFragment, Observer {
                 Log.d("TAG", it.toString())
