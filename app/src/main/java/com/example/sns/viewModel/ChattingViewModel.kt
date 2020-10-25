@@ -3,6 +3,7 @@ package com.example.sns.viewModel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.sns.adapter.ChatAdapter
+import com.example.sns.adapter.RoomListAdapter
 import com.example.sns.base.BaseViewModel
 import com.example.sns.model.ChatModel
 import com.example.sns.network.socket.SocketListeners
@@ -35,7 +36,8 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     var mSocket: Socket? = null
 
     var arrayList = arrayListOf<ChatDataBase>()
-    val mAdapter = ChatAdapter(arrayList)
+    val chatAdapter = ChatAdapter(arrayList)
+    var roomAdapter = RoomListAdapter(arrayList)
     var chatDb : DataBase? = null
 
     fun connect() {

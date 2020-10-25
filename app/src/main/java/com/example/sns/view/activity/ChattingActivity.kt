@@ -31,7 +31,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
     override fun init() {
         viewModel.connect()
         viewModel.chatDb = DataBase.getInstance(this)
-        chat_recyclerview.adapter = viewModel.mAdapter
+        chat_recyclerview.adapter = viewModel.chatAdapter
         //레이아웃 매니저 선언
         chat_recyclerview.layoutManager = LinearLayoutManager(this)
         chat_recyclerview.setHasFixedSize(true)//아이템이 추가삭제될때 크기측면에서 오류 안나게 해줌]
@@ -47,7 +47,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
         viewModel.chatDb?.dao()?.getRecentMessage(MyApplication.prefs.getUsername("myName", ""))?.forEach {
             Log.d("TAG", "${it.receiver}, ${it.message}")
         }
-        viewModel.mAdapter.notifyDataSetChanged()
+        viewModel.chatAdapter.notifyDataSetChanged()
 
     }
 
@@ -63,7 +63,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
 
             finishReceiveMessage.observe(this@ChattingActivity) {
                 Log.d("TAG", "SUC")
-                mAdapter.addItem(ChatDataBase(
+                chatAdapter.addItem(ChatDataBase(
                     id = 0,
                     message = receiveMessage,
                     receiver = MyApplication.prefs.getUsername("myName", ""),
@@ -79,13 +79,13 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                         time = receiveDate
                 ))
 
-                mAdapter.notifyDataSetChanged()
+                chatAdapter.notifyDataSetChanged()
             }
 
             finishSend.observe(this@ChattingActivity) {
                 if (it) {
                     toast("전송성공")
-                    mAdapter.addItem(ChatDataBase(
+                    chatAdapter.addItem(ChatDataBase(
                                 id = 0,
                                 message = editText2.text.toString().trim(),
                                 receiver = MyApplication.prefs.getUsername("targetName", ""),
@@ -104,7 +104,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                     Log.d("TAG", "receiver : ${MyApplication.prefs.getUsername("targetName", "")}")
                     Log.d("TAG", "sender : ${MyApplication.prefs.getUsername("myName", "")}")
 
-                    mAdapter.notifyDataSetChanged()
+                    chatAdapter.notifyDataSetChanged()
                     editText2.setText("")
                 } else {
                     toast("전송 실패")
