@@ -1,5 +1,6 @@
 package com.example.sns.viewModel
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.sns.adapter.ChatAdapter
@@ -27,6 +28,9 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
     var receiveMessage: String = ""
     var receiveDate: Long = 0
 
+    val userName : String by lazy { MyApplication.prefs.getUsername("myName", "") }
+    var targetName : String = ""
+
     var finishSend = MutableLiveData<Boolean>()
     var finishUserConnect = MutableLiveData<Boolean>()
     var finishReceiveMessage = MutableLiveData<Boolean>()
@@ -53,7 +57,7 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
     fun sendMessage() {
         val jsonObject = JSONObject()
         try {
-            jsonObject.put("room", MyApplication.prefs.getUsername("targetName", ""))
+            jsonObject.put("room", targetName)
             jsonObject.put("message", messageEdit.value.toString())
         } catch (e: JSONException) {
             e.printStackTrace()
@@ -64,8 +68,8 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
     fun tryRoomConnect(item : ChatDataBase){
         val jsonObject = JSONObject()
         try {
-            jsonObject.put("id", MyApplication.prefs.getUsername("myName", ""))
-            MyApplication.prefs.setUsername("targetName",  item.receiver)
+            jsonObject.put("id", userName)
+            targetName = item.receiver
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -83,7 +87,7 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
         chatDb?.dao()?.insert(ChatDataBase(
             id = 0,
             message = receiveMessage,
-            receiver = MyApplication.prefs.getUsername("myName", ""),
+            receiver = userName,
             sender = sender,
             time = receiveDate
         ))
@@ -110,7 +114,7 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
         chatDb?.dao()?.insert(ChatDataBase(
             id = 0,
             message = receiveMessage,
-            receiver = MyApplication.prefs.getUsername("myName", ""),
+            receiver = userName,
             sender = sender,
             time = receiveDate
         ))
@@ -121,8 +125,8 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
         chatDb?.dao()?.insert(ChatDataBase(
             id = 0,
             message = messageEdit.value.toString().trim(),
-            receiver = MyApplication.prefs.getUsername("targetName", ""),
-            sender = MyApplication.prefs.getUsername("myName", ""),
+            receiver = targetName,
+            sender = userName,
             time = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
         ))
     }
@@ -138,7 +142,7 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
         arrayList.clear()
 
         arrayList.addAll(
-            chatDb?.dao()?.getRecentMessage(MyApplication.prefs.getUsername("myName", ""))!! as ArrayList<ChatDataBase>
+            chatDb?.dao()?.getRecentMessage(userName)!! as ArrayList<ChatDataBase>
         )
 
     }

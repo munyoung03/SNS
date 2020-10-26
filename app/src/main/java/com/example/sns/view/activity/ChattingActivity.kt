@@ -1,6 +1,6 @@
 package com.example.sns.view.activity
 
-import android.util.Log
+import android.text.TextUtils
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sns.R
@@ -19,7 +19,7 @@ import java.time.ZoneOffset
 
 class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel>() {
 
-    private lateinit var chatAdapter : ChatAdapter
+    private lateinit var chatAdapter: ChatAdapter
 
     override val viewModel: ChattingViewModel
         get() = getViewModel(ChattingViewModel::class)
@@ -38,21 +38,22 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
     override fun observerViewModel() {
         with(viewModel) {
             sendMessageBtn.observe(this@ChattingActivity) {
-                if(editText2.text.isNotEmpty())
-                {
+                if (!TextUtils.isEmpty(messageEdit.value)) {
                     sendMessage()
                 }
             }
 
             finishReceiveMessage.observe(this@ChattingActivity) {
 
-                chatAdapter.addItem(ChatDataBase(
-                    id = 0,
-                    message = receiveMessage,
-                    receiver = MyApplication.prefs.getUsername("myName", ""),
-                    sender = sender,
-                    time = receiveDate
-                ))
+                chatAdapter.addItem(
+                    ChatDataBase(
+                        id = 0,
+                        message = receiveMessage,
+                        receiver = userName,
+                        sender = sender,
+                        time = receiveDate
+                    )
+                )
 
                 insertReceiveData()
 
@@ -62,13 +63,15 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
             finishSend.observe(this@ChattingActivity) {
                 if (it) {
                     toast("전송성공")
-                    chatAdapter.addItem(ChatDataBase(
-                                id = 0,
-                                message = editText2.text.toString().trim(),
-                                receiver = MyApplication.prefs.getUsername("targetName", ""),
-                                sender = MyApplication.prefs.getUsername("myName", ""),
-                                time = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
-                            ))
+                    chatAdapter.addItem(
+                        ChatDataBase(
+                            id = 0,
+                            message = messageEdit.value.toString(),
+                            receiver = viewModel.targetName,
+                            sender = userName,
+                            time = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+                        )
+                    )
 
                     chatAdapter.notifyDataSetChanged()
 
@@ -82,8 +85,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
         }
     }
 
-    private fun setRecyclerView()
-    {
+    private fun setRecyclerView() {
         chatAdapter = ChatAdapter(viewModel.arrayList)
 
         chat_recyclerview.adapter = chatAdapter
@@ -92,16 +94,18 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
         chat_recyclerview.setHasFixedSize(true)
     }
 
-    private fun addData()
-    {
-        viewModel.arrayList.clear()
+    private fun addData() {
+        with(viewModel)
+        {
+            arrayList.clear()
 
-        viewModel.arrayList.addAll(
-            viewModel.chatDb?.dao()?.getMessage(
-                sender = MyApplication.prefs.getUsername("targetName", ""),
-                receiver = MyApplication.prefs.getUsername("myName", "")
-            ) as ArrayList<ChatDataBase>
-        )
+            arrayList.addAll(
+                chatDb?.dao()?.getMessage(
+                    sender = targetName,
+                    receiver = userName
+                ) as ArrayList<ChatDataBase>
+            )
+        }
 
         chatAdapter.notifyDataSetChanged()
     }

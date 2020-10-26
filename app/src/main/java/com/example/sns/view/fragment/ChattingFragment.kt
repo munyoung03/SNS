@@ -79,7 +79,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
     }
 
 
-
     private fun setAdapter()
     {
         roomAdapter = RoomListAdapter(viewModel.arrayList) { item: ChatDataBase ->
@@ -90,6 +89,4 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
 
         chat_room_recyclerview.adapter = roomAdapter
     }
-
-
 }
