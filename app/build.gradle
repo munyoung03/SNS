@@ -80,4 +80,8 @@ dependencies {
     implementation 'com.github.nkzawa:socket.io-client:0.6.0'
 
     implementation 'com.github.nks0614:DGSW_Project:1.6.1'
+
+    kapt "androidx.room:room-compiler:2.2.5"
+    testImplementation "androidx.room:room-testing:2.2.5"
+    implementation "androidx.room:room-runtime:2.2.5"
 }

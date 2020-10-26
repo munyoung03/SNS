@@ -2,10 +2,14 @@ package com.example.sns.viewModel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.example.sns.adapter.ChatAdapter
+import com.example.sns.adapter.RoomListAdapter
 import com.example.sns.base.BaseViewModel
 import com.example.sns.model.ChatModel
 import com.example.sns.network.socket.SocketListeners
 import com.example.sns.network.socket.SocketManager
+import com.example.sns.room.ChatDataBase
+import com.example.sns.room.DataBase
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.SingleLiveEvent
 import com.github.nkzawa.socketio.client.Socket
@@ -18,29 +22,31 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     var targetEmail = MutableLiveData<String>()
     var messageEdit = MutableLiveData<String>()
 
-    var receiveUser: String = ""
+    var sender: String = ""
     var receiveMessage: String = ""
-    var receiveDate: String = ""
+    var receiveDate: Long = 0
 
     var finishSend = MutableLiveData<Boolean>()
     var finishUserConnect = MutableLiveData<Boolean>()
     var finishReceiveMessage = MutableLiveData<Boolean>()
 
-    var joinRoomBtn = SingleLiveEvent<Unit>()
     var sendMessageBtn = SingleLiveEvent<Unit>()
     val itemList = MutableLiveData<ChatModel>()
 
-    lateinit var mSocket: Socket
+    var mSocket: Socket? = null
+
+    var arrayList = arrayListOf<ChatDataBase>()
+    val chatAdapter = ChatAdapter(arrayList)
+    //var roomAdapter = RoomListAdapter(arrayList)
+    var chatDb : DataBase? = null
 
     fun connect() {
+        Log.d("TAG", "connect")
         mSocket = SocketManager.getSocket()
+        SocketManager.connectSocket()
+        SocketManager.observe( this)
 
-        SocketManager.observe(this)
-    }
 
-
-    fun joinRoomBtnClick() {
-        joinRoomBtn.call()
     }
 
     fun sendMessageBtnClick() {
@@ -55,18 +61,33 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        mSocket.emit("message", jsonObject)
+        mSocket?.emit("message", jsonObject)
     }
 
+    fun tryRoomConnect(item : ChatDataBase){
+        Log.d("TAG", "버튼 클릭 성공")
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("id", myEmail.value)
+            MyApplication.prefs.setUsername("targetName",  item.receiver)
+            Log.d("TAG", item.receiver)
+            Log.d("TAG", myEmail.value.toString())
+        } catch (e: JSONException) {
+            Log.d("TAG", "캐치")
+            e.printStackTrace()
+        }
+        mSocket?.emit("user connect", jsonObject)
+    }
 
     override fun onMessageReceive(model: ChatModel) {
 
         itemList.value = model;
-        receiveUser = model.name
-        receiveUser = receiveUser.substring(0, receiveUser.length - 8)
+        sender = model.name
+        sender = sender.substring(0, sender.length - 8)
         receiveMessage = model.message
-        finishReceiveMessage.postValue(true)
-        Log.d("TAG", "user : $receiveUser\n message : $receiveMessage")
+        receiveDate = model.date
+        finishReceiveMessage.value = true
+        Log.d("TAG", "user : $sender\n message : $receiveMessage")
 
     }
 
@@ -75,16 +96,12 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     }
 
     override fun onDisconnect() {
-        mSocket.disconnect()
         Log.d("TAG", "Disconnect!")
     }
 
     override fun onUserConnect(success: Boolean) {
         if (success) {
             Log.d("TAG", "룸입장 성공")
-            MyApplication.prefs.setUsername("myName", myEmail.value.toString())
-            MyApplication.prefs.setUsername("targetName", targetEmail.value.toString())
-            Log.d("TAG", targetEmail.value.toString())
             finishUserConnect.value = true
         } else {
             finishUserConnect.value = false
