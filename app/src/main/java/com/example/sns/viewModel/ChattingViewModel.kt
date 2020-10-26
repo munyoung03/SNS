@@ -26,7 +26,7 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
     var receiveDate: Long = 0
 
     val userName: String by lazy { MyApplication.prefs.getUsername("myName", "") }
-    var targetName: String = ""
+    val targetName: String by lazy { MyApplication.prefs.getUsername("targetName", "") }
 
     var finishSend = MutableLiveData<Boolean>()
     var finishUserConnect = MutableLiveData<Boolean>()
@@ -66,8 +66,7 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
         val jsonObject = JSONObject()
         try {
             jsonObject.put("id", userName)
-            targetName = item.receiver
-            Log.d("TAG", targetName)
+            MyApplication.prefs.setUsername("targetName", item.receiver)
         } catch (e: JSONException) {
             e.printStackTrace()
         }

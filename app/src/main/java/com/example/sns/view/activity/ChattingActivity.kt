@@ -1,6 +1,7 @@
 package com.example.sns.view.activity
 
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sns.R
@@ -27,11 +28,14 @@ class  ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewMode
         get() = R.layout.activity_chatting
 
     override fun init() {
+
+        //Log.d("TAG", "name:"+viewModel.targetName)
         viewModel.connect()
         viewModel.chatDb = DataBase.getInstance(this)
 
         setRecyclerView()
         addData()
+        Log.d("TAG", "name:"+viewModel.targetName)
     }
 
     override fun observerViewModel() {
