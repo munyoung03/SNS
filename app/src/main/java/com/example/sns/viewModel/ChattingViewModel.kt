@@ -17,6 +17,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import java.util.ArrayList
 
 class ChattingViewModel : BaseViewModel(), SocketListeners {
 
@@ -119,10 +120,26 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
     {
         chatDb?.dao()?.insert(ChatDataBase(
             id = 0,
-            message = messageEdit.toString().trim(),
+            message = messageEdit.value.toString().trim(),
             receiver = MyApplication.prefs.getUsername("targetName", ""),
             sender = MyApplication.prefs.getUsername("myName", ""),
             time = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
         ))
+    }
+
+    fun socketReset()
+    {
+        SocketManager.closeSocket()
+        connect()
+    }
+
+    fun setFragmentRecyclerViewData()
+    {
+        arrayList.clear()
+
+        arrayList.addAll(
+            chatDb?.dao()?.getRecentMessage(MyApplication.prefs.getUsername("myName", ""))!! as ArrayList<ChatDataBase>
+        )
+
     }
 }

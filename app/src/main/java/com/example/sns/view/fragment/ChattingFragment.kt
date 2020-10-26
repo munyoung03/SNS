@@ -35,11 +35,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
     override fun init() {
         viewModel.chatDb = DataBase.getInstance(mContext)
 
-        viewModel.arrayList.clear()
-
-        //레이아웃 매니저 선언
-        chat_room_recyclerview.layoutManager = LinearLayoutManager(mContext)
-        chat_room_recyclerview.setHasFixedSize(true)//아이템이 추가삭제될때 크기측면에서 오류 안나게 해줌]
+        setRecyclerView()
 
         editText.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -48,9 +44,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
             }
             false
         }
-
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -59,31 +53,13 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
 
     override fun onResume() {
         super.onResume()
-        Log.d("TAG", "Resume")
-        SocketManager.closeSocket()
-        viewModel.connect()
-        viewModel.arrayList.clear()
-        viewModel.chatDb?.dao()?.getRecentMessage(MyApplication.prefs.getUsername("myName", ""))
-            ?.let {
-                it.forEach {
-                    Log.d("TAG", "${it.receiver}, ${it.message}")
-                }
-                viewModel.arrayList.addAll(it as ArrayList<ChatDataBase>)
-            }
-
-        roomAdapter = RoomListAdapter(viewModel.arrayList) { item: ChatDataBase ->
-            viewModel.tryRoomConnect(
-                item
-            )
-        }
-        chat_room_recyclerview.adapter = roomAdapter
+        viewModel.socketReset()
+        viewModel.setFragmentRecyclerViewData()
+        setAdapter()
     }
 
     override fun observerViewModel() {
         with(viewModel) {
-
-            //버튼 클릭시 emit을 통해 서버에 같은 이벤트 이름을 가진 socket.on으로 jsonObject를 날림
-
             finishUserConnect.observe(this@ChattingFragment, Observer {
                 Log.d("TAG", it.toString())
                 if (it) {
@@ -95,4 +71,25 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
             })
         }
     }
+
+    private fun setRecyclerView()
+    {
+        chat_room_recyclerview.layoutManager = LinearLayoutManager(mContext)
+        chat_room_recyclerview.setHasFixedSize(true)
+    }
+
+
+
+    private fun setAdapter()
+    {
+        roomAdapter = RoomListAdapter(viewModel.arrayList) { item: ChatDataBase ->
+            viewModel.tryRoomConnect(
+                item
+            )
+        }
+
+        chat_room_recyclerview.adapter = roomAdapter
+    }
+
+
 }

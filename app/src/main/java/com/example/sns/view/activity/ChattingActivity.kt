@@ -72,6 +72,8 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
 
                     chatAdapter.notifyDataSetChanged()
 
+                    insertSendData()
+
                     messageEdit.value = ""
                 } else {
                     toast("전송 실패")

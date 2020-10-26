@@ -16,6 +16,7 @@ interface RetrofitService {
 
     @POST("/auth/registration")
     fun register(
-        @Body registerBody: RegisterBody
+        @Body registerBody: RegisterBody,
+
     ): Call<RegisterData>
 }
