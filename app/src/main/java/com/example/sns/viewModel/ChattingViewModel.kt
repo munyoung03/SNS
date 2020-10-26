@@ -12,13 +12,14 @@ import com.example.sns.room.DataBase
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.SingleLiveEvent
 import com.github.nkzawa.socketio.client.Socket
+import kotlinx.android.synthetic.main.activity_chatting.*
 import org.json.JSONException
 import org.json.JSONObject
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
-class ChattingViewModel() : BaseViewModel(), SocketListeners {
+class ChattingViewModel : BaseViewModel(), SocketListeners {
 
-    var myEmail = MutableLiveData<String>()
-    var targetEmail = MutableLiveData<String>()
     var messageEdit = MutableLiveData<String>()
 
     var sender: String = ""
@@ -30,13 +31,11 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     var finishReceiveMessage = MutableLiveData<Boolean>()
 
     var sendMessageBtn = SingleLiveEvent<Unit>()
-    val itemList = MutableLiveData<ChatModel>()
 
     var mSocket: Socket? = null
 
     var arrayList = arrayListOf<ChatDataBase>()
-    val chatAdapter = ChatAdapter(arrayList)
-    //var roomAdapter = RoomListAdapter(arrayList)
+
     var chatDb : DataBase? = null
 
     fun connect() {
@@ -44,8 +43,6 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
         mSocket = SocketManager.getSocket()
         SocketManager.connectSocket()
         SocketManager.observe( this)
-
-
     }
 
     fun sendMessageBtnClick() {
@@ -64,15 +61,11 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     }
 
     fun tryRoomConnect(item : ChatDataBase){
-        Log.d("TAG", "버튼 클릭 성공")
         val jsonObject = JSONObject()
         try {
-            jsonObject.put("id", myEmail.value)
+            jsonObject.put("id", MyApplication.prefs.getUsername("myName", ""))
             MyApplication.prefs.setUsername("targetName",  item.receiver)
-            Log.d("TAG", item.receiver)
-            Log.d("TAG", myEmail.value.toString())
         } catch (e: JSONException) {
-            Log.d("TAG", "캐치")
             e.printStackTrace()
         }
         mSocket?.emit("user connect", jsonObject)
@@ -80,14 +73,19 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
 
     override fun onMessageReceive(model: ChatModel) {
 
-        itemList.value = model;
         sender = model.name
         sender = sender.substring(0, sender.length - 8)
         receiveMessage = model.message
         receiveDate = model.date
         finishReceiveMessage.value = true
-        Log.d("TAG", "user : $sender\n message : $receiveMessage")
 
+        chatDb?.dao()?.insert(ChatDataBase(
+            id = 0,
+            message = receiveMessage,
+            receiver = MyApplication.prefs.getUsername("myName", ""),
+            sender = sender,
+            time = receiveDate
+        ))
     }
 
     override fun onConnect() {
@@ -99,94 +97,32 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     }
 
     override fun onUserConnect(success: Boolean) {
-        if (success) {
-            Log.d("TAG", "룸입장 성공")
-            finishUserConnect.value = true
-        } else {
-            finishUserConnect.value = false
-        }
+        finishUserConnect.value = success
     }
 
     override fun onUserSendMessage(success: Boolean) {
-        if (success) {
-            Log.d("TAG", "들어옴2")
-            finishSend.value = true
-            Log.d("TAG", "전송 : ${finishSend.value.toString()}")
-        } else {
-            Log.d("TAG", "들어옴3")
-            finishSend.value = false
-        }
+        finishSend.value = success
     }
 
+    fun insertReceiveData()
+    {
+        chatDb?.dao()?.insert(ChatDataBase(
+            id = 0,
+            message = receiveMessage,
+            receiver = MyApplication.prefs.getUsername("myName", ""),
+            sender = sender,
+            time = receiveDate
+        ))
+    }
+
+    fun insertSendData()
+    {
+        chatDb?.dao()?.insert(ChatDataBase(
+            id = 0,
+            message = messageEdit.toString().trim(),
+            receiver = MyApplication.prefs.getUsername("targetName", ""),
+            sender = MyApplication.prefs.getUsername("myName", ""),
+            time = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+        ))
+    }
 }
-
-/*
-
-    private var sendMessageResponse = Emitter.Listener { args->
-        Log.d("TAG", "들어옴")
-        val data = args[0] as JSONObject
-        val success: Boolean
-        val message: String
-        try {
-            success = data.getBoolean("success")
-            if (success) {
-                Log.d("TAG", "들어옴2")
-                GlobalScope.launch {
-                    withContext(Dispatchers.Main){
-                        finishSend.value = true
-                        Log.d("TAG", "전송 : ${finishSend.value.toString()}")
-                    }
-                }
-            } else {
-                Log.d("TAG", "들어옴3")
-                GlobalScope.launch {
-                    withContext(Dispatchers.Main){
-                        finishSend.value = false
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.d("TAG", "들어옴4")
-            Log.d("TAG", "캐치 : $e")
-        }
-    }
-
-    private var newUser = Emitter.Listener { args ->
-        val data = args[0] as JSONObject
-        val success: Boolean
-        try {
-            success = data.getBoolean("success")
-            if (success) {
-                Log.d("TAG", "룸입장 성공")
-                MyApplication.prefs.setUsername("myName", myEmail.value.toString())
-                MyApplication.prefs.setUsername("targetName", targetEmail.value.toString())
-                GlobalScope.launch{
-                    withContext(Dispatchers.Main){
-                        finishUserConnect.value = true
-                        Log.d("TAG", "room : ${finishUserConnect.value.toString()}")
-                    }
-                }
-
-            } else {
-                finishUserConnect.postValue(false)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private var newMessage = Emitter.Listener { args ->
-        val data = args[0] as JSONObject
-        try {
-            receiveDate = data.getString("when")
-            receiveMessage = data.getString("message")
-            receiveUser = data.getString("user")
-
-            receiveUser = receiveUser.substring(0, receiveUser.length - 8)
-
-        } catch (e: Exception) {
-            finishReceiveMessage.postValue(false)
-            e.printStackTrace()
-        }
-    }
- */
