@@ -1,9 +1,7 @@
 package com.example.sns.viewModel
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.sns.adapter.ChatAdapter
 import com.example.sns.base.BaseViewModel
 import com.example.sns.model.ChatModel
 import com.example.sns.network.socket.SocketListeners
@@ -13,12 +11,11 @@ import com.example.sns.room.DataBase
 import com.example.sns.widget.MyApplication
 import com.example.sns.widget.SingleLiveEvent
 import com.github.nkzawa.socketio.client.Socket
-import kotlinx.android.synthetic.main.activity_chatting.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.util.ArrayList
+import java.util.*
 
 class ChattingViewModel : BaseViewModel(), SocketListeners {
 
@@ -28,8 +25,8 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
     var receiveMessage: String = ""
     var receiveDate: Long = 0
 
-    val userName : String by lazy { MyApplication.prefs.getUsername("myName", "") }
-    var targetName : String = ""
+    val userName: String by lazy { MyApplication.prefs.getUsername("myName", "") }
+    var targetName: String = ""
 
     var finishSend = MutableLiveData<Boolean>()
     var finishUserConnect = MutableLiveData<Boolean>()
@@ -41,13 +38,13 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
 
     var arrayList = arrayListOf<ChatDataBase>()
 
-    var chatDb : DataBase? = null
+    var chatDb: DataBase? = null
 
     fun connect() {
         Log.d("TAG", "connect")
         mSocket = SocketManager.getSocket()
         SocketManager.connectSocket()
-        SocketManager.observe( this)
+        SocketManager.observe(this)
     }
 
     fun sendMessageBtnClick() {
@@ -65,11 +62,12 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
         mSocket?.emit("message", jsonObject)
     }
 
-    fun tryRoomConnect(item : ChatDataBase){
+    fun tryRoomConnect(item: ChatDataBase) {
         val jsonObject = JSONObject()
         try {
             jsonObject.put("id", userName)
             targetName = item.receiver
+            Log.d("TAG", targetName)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -84,13 +82,15 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
         receiveDate = model.date
         finishReceiveMessage.value = true
 
-        chatDb?.dao()?.insert(ChatDataBase(
-            id = 0,
-            message = receiveMessage,
-            receiver = userName,
-            sender = sender,
-            time = receiveDate
-        ))
+        chatDb?.dao()?.insert(
+            ChatDataBase(
+                id = 0,
+                message = receiveMessage,
+                receiver = userName,
+                sender = sender,
+                time = receiveDate
+            )
+        )
     }
 
     override fun onConnect() {
@@ -109,36 +109,36 @@ class ChattingViewModel : BaseViewModel(), SocketListeners {
         finishSend.value = success
     }
 
-    fun insertReceiveData()
-    {
-        chatDb?.dao()?.insert(ChatDataBase(
-            id = 0,
-            message = receiveMessage,
-            receiver = userName,
-            sender = sender,
-            time = receiveDate
-        ))
+    fun insertReceiveData() {
+        chatDb?.dao()?.insert(
+            ChatDataBase(
+                id = 0,
+                message = receiveMessage,
+                receiver = userName,
+                sender = sender,
+                time = receiveDate
+            )
+        )
     }
 
-    fun insertSendData()
-    {
-        chatDb?.dao()?.insert(ChatDataBase(
-            id = 0,
-            message = messageEdit.value.toString().trim(),
-            receiver = targetName,
-            sender = userName,
-            time = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
-        ))
+    fun insertSendData() {
+        chatDb?.dao()?.insert(
+            ChatDataBase(
+                id = 0,
+                message = messageEdit.value.toString().trim(),
+                receiver = targetName,
+                sender = userName,
+                time = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+            )
+        )
     }
 
-    fun socketReset()
-    {
+    fun socketReset() {
         SocketManager.closeSocket()
         connect()
     }
 
-    fun setFragmentRecyclerViewData()
-    {
+    fun setFragmentRecyclerViewData() {
         arrayList.clear()
 
         arrayList.addAll(

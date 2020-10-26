@@ -3,8 +3,6 @@ package com.example.sns.room
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.sns.model.ChatModel
-import java.time.LocalDate
 
 @Entity(tableName = "chat")
 class ChatDataBase(

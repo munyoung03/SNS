@@ -3,23 +3,19 @@ package com.example.sns.view.fragment
 import android.content.Context
 import android.util.Log
 import android.view.inputmethod.EditorInfo
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sns.R
 import com.example.sns.adapter.RoomListAdapter
 import com.example.sns.base.BaseFragment
 import com.example.sns.databinding.FragmentChattingBinding
-import com.example.sns.network.socket.SocketManager
 import com.example.sns.room.ChatDataBase
 import com.example.sns.room.DataBase
 import com.example.sns.view.activity.ChattingActivity
 import com.example.sns.viewModel.ChattingViewModel
-import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.noFinishStartActivity
 import com.example.sns.widget.extension.toast
 import kotlinx.android.synthetic.main.fragment_chatting.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import java.util.*
 
 class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel>() {
 
@@ -60,7 +56,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
 
     override fun observerViewModel() {
         with(viewModel) {
-            finishUserConnect.observe(this@ChattingFragment, Observer {
+            finishUserConnect.observe(this@ChattingFragment, {
                 Log.d("TAG", it.toString())
                 if (it) {
                     toast("입장")
@@ -72,15 +68,13 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         }
     }
 
-    private fun setRecyclerView()
-    {
+    private fun setRecyclerView() {
         chat_room_recyclerview.layoutManager = LinearLayoutManager(mContext)
         chat_room_recyclerview.setHasFixedSize(true)
     }
 
 
-    private fun setAdapter()
-    {
+    private fun setAdapter() {
         roomAdapter = RoomListAdapter(viewModel.arrayList) { item: ChatDataBase ->
             viewModel.tryRoomConnect(
                 item

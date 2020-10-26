@@ -119,7 +119,7 @@ class MapFragment : BaseFragment<FragmentMapBinding, MapViewModel>(), OnMapReady
     }
 
     override fun onLocationChanged(location: Location) {
-        if (view == null) return;
+        if (view == null) return
 
         var latitude = location.latitude
         var longitude = location.longitude

@@ -7,12 +7,22 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 
 fun Fragment.startActivity(moveActivity: Class<*>) {
-    startActivity(Intent(context!!.applicationContext, moveActivity).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+    startActivity(
+        Intent(
+            context!!.applicationContext,
+            moveActivity
+        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    )
     activity!!.finish()
 }
 
 fun Fragment.noFinishStartActivity(moveActivity: Class<*>) {
-    startActivity(Intent(context!!.applicationContext, moveActivity).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+    startActivity(
+        Intent(
+            context!!.applicationContext,
+            moveActivity
+        ).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    )
 }
 
 fun Fragment.toast(message: String?) {

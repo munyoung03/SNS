@@ -6,28 +6,29 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [ChatDataBase::class], version = 5)
-abstract class DataBase: RoomDatabase() {
+abstract class DataBase : RoomDatabase() {
 
     abstract fun dao(): Dao
 
-    companion object{
+    companion object {
         private var INSTANCE: DataBase? = null
 
-        fun getInstance(context: Context): DataBase?{
-            if(INSTANCE == null)
-            {
-                synchronized(ChatDataBase::class.java){
-                    INSTANCE = Room.databaseBuilder(context.applicationContext,
-                            DataBase::class.java,"memo.db")
-                            .fallbackToDestructiveMigration()
-                            .allowMainThreadQueries()
-                            .build()
+        fun getInstance(context: Context): DataBase? {
+            if (INSTANCE == null) {
+                synchronized(ChatDataBase::class.java) {
+                    INSTANCE = Room.databaseBuilder(
+                        context.applicationContext,
+                        DataBase::class.java, "memo.db"
+                    )
+                        .fallbackToDestructiveMigration()
+                        .allowMainThreadQueries()
+                        .build()
                 }
             }
             return INSTANCE
         }
 
-        fun destroyInstance(){
+        fun destroyInstance() {
             INSTANCE = null
         }
     }

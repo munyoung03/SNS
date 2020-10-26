@@ -1,7 +1,7 @@
 package com.example.sns.view.activity
 
 import android.text.TextUtils
-import androidx.lifecycle.observe
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sns.R
 import com.example.sns.adapter.ChatAdapter
@@ -10,14 +10,13 @@ import com.example.sns.databinding.ActivityChattingBinding
 import com.example.sns.room.ChatDataBase
 import com.example.sns.room.DataBase
 import com.example.sns.viewModel.ChattingViewModel
-import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.toast
 import kotlinx.android.synthetic.main.activity_chatting.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel>() {
+class  ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel>() {
 
     private lateinit var chatAdapter: ChatAdapter
 
@@ -37,13 +36,13 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
 
     override fun observerViewModel() {
         with(viewModel) {
-            sendMessageBtn.observe(this@ChattingActivity) {
+            sendMessageBtn.observe(this@ChattingActivity, Observer {
                 if (!TextUtils.isEmpty(messageEdit.value)) {
                     sendMessage()
                 }
-            }
+            })
 
-            finishReceiveMessage.observe(this@ChattingActivity) {
+            finishReceiveMessage.observe(this@ChattingActivity, Observer {
 
                 chatAdapter.addItem(
                     ChatDataBase(
@@ -58,9 +57,9 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                 insertReceiveData()
 
                 chatAdapter.notifyDataSetChanged()
-            }
+            })
 
-            finishSend.observe(this@ChattingActivity) {
+            finishSend.observe(this@ChattingActivity, Observer {
                 if (it) {
                     toast("전송성공")
                     chatAdapter.addItem(
@@ -81,7 +80,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding, ChattingViewModel
                 } else {
                     toast("전송 실패")
                 }
-            }
+            })
         }
     }
 

@@ -18,5 +18,5 @@ interface RetrofitService {
     fun register(
         @Body registerBody: RegisterBody,
 
-    ): Call<RegisterData>
+        ): Call<RegisterData>
 }

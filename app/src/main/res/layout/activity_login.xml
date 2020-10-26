@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.activity.LoginActivity">
+
     <data>
+
         <variable
             name="viewModel"
             type="com.example.sns.viewModel.LoginViewModel" />
@@ -46,9 +47,9 @@
             android:layout_marginTop="60dp"
             android:background="@drawable/teduri"
             android:hint="PASSWORD"
+            android:inputType="textPassword"
             android:text="@={viewModel.password}"
             android:textSize="30dp"
-            android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="@+id/email"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/email"
@@ -78,8 +79,8 @@
             android:id="@+id/btn_facebook_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{()->viewModel.faceBookLoginBtnClick()}"
             android:layout_marginTop="20dp"
+            android:onClick="@{()->viewModel.faceBookLoginBtnClick()}"
             app:layout_constraintEnd_toEndOf="@+id/login_btn"
             app:layout_constraintStart_toStartOf="@+id/login_btn"
             app:layout_constraintTop_toBottomOf="@+id/login_btn" />
@@ -89,8 +90,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="구글 "
             android:onClick="@{()->viewModel.googleLoginBtnClick()}"
+            android:text="구글 "
             app:layout_constraintEnd_toEndOf="@+id/btn_facebook_login"
             app:layout_constraintStart_toStartOf="@+id/btn_facebook_login"
             app:layout_constraintTop_toBottomOf="@+id/btn_facebook_login" />

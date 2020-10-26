@@ -16,6 +16,7 @@ fun AppCompatActivity.startActivity(activity: Class<*>) {
     finish()
 }
 
-fun AppCompatActivity.toast(text : String) {
-    android.widget.Toast.makeText(applicationContext, text, android.widget.Toast.LENGTH_SHORT).show()
+fun AppCompatActivity.toast(text: String) {
+    android.widget.Toast.makeText(applicationContext, text, android.widget.Toast.LENGTH_SHORT)
+        .show()
 }

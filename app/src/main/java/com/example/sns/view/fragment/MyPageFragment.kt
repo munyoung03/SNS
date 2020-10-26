@@ -19,7 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
 class MyPageFragment : BaseFragment<FragmentMypageBinding, MyPageViewModel>() {
 
     companion object {
-        private val IMAGE_PICK_CODE = 1000;
+        private val IMAGE_PICK_CODE = 1000
     }
 
     override val viewModel: MyPageViewModel
