@@ -37,7 +37,7 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
 
     var arrayList = arrayListOf<ChatDataBase>()
     val chatAdapter = ChatAdapter(arrayList)
-    var roomAdapter = RoomListAdapter(arrayList)
+    //var roomAdapter = RoomListAdapter(arrayList)
     var chatDb : DataBase? = null
 
     fun connect() {
@@ -64,11 +64,13 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
         mSocket?.emit("message", jsonObject)
     }
 
-    fun tryRoomConnect(){
+    fun tryRoomConnect(item : ChatDataBase){
         Log.d("TAG", "버튼 클릭 성공")
         val jsonObject = JSONObject()
         try {
             jsonObject.put("id", myEmail.value)
+            MyApplication.prefs.setUsername("targetName",  item.receiver)
+            Log.d("TAG", item.receiver)
             Log.d("TAG", myEmail.value.toString())
         } catch (e: JSONException) {
             Log.d("TAG", "캐치")
@@ -100,8 +102,6 @@ class ChattingViewModel() : BaseViewModel(), SocketListeners {
     override fun onUserConnect(success: Boolean) {
         if (success) {
             Log.d("TAG", "룸입장 성공")
-            MyApplication.prefs.setUsername("targetName", targetEmail.value.toString())
-            Log.d("TAG", targetEmail.value.toString())
             finishUserConnect.value = true
         } else {
             finishUserConnect.value = false
