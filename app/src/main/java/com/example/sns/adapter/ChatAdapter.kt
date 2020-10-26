@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sns.R
-import com.example.sns.model.ChatModel
 import com.example.sns.room.ChatDataBase
 import com.example.sns.widget.MyApplication
 

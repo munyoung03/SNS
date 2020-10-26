@@ -19,12 +19,12 @@ import com.example.sns.widget.extension.noFinishStartActivity
 import com.example.sns.widget.extension.toast
 import kotlinx.android.synthetic.main.fragment_chatting.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import java.util.ArrayList
+import java.util.*
 
 class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel>() {
 
-    lateinit var roomAdapter : RoomListAdapter
-    lateinit var mContext : Context
+    lateinit var roomAdapter: RoomListAdapter
+    lateinit var mContext: Context
 
     override val viewModel: ChattingViewModel
         get() = getViewModel(ChattingViewModel::class)
@@ -35,24 +35,8 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
     override fun init() {
         viewModel.chatDb = DataBase.getInstance(mContext)
 
-
         viewModel.arrayList.clear()
 
-
-        viewModel.chatDb?.dao()?.getRecentMessage(MyApplication.prefs.getUsername("myName", ""))?.let {
-            it.forEach {
-                Log.d("TAG", "${it.receiver}, ${it.message}")
-            }
-            viewModel.arrayList.addAll(it as ArrayList<ChatDataBase>)
-        }
-
-        roomAdapter = RoomListAdapter(viewModel.arrayList) { item: ChatDataBase ->
-            viewModel.tryRoomConnect(
-                item
-            )
-        }
-
-        chat_room_recyclerview.adapter = roomAdapter
         //레이아웃 매니저 선언
         chat_room_recyclerview.layoutManager = LinearLayoutManager(mContext)
         chat_room_recyclerview.setHasFixedSize(true)//아이템이 추가삭제될때 크기측면에서 오류 안나게 해줌]
@@ -64,7 +48,9 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
             }
             false
         }
+
     }
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -76,6 +62,21 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         Log.d("TAG", "Resume")
         SocketManager.closeSocket()
         viewModel.connect()
+        viewModel.arrayList.clear()
+        viewModel.chatDb?.dao()?.getRecentMessage(MyApplication.prefs.getUsername("myName", ""))
+            ?.let {
+                it.forEach {
+                    Log.d("TAG", "${it.receiver}, ${it.message}")
+                }
+                viewModel.arrayList.addAll(it as ArrayList<ChatDataBase>)
+            }
+
+        roomAdapter = RoomListAdapter(viewModel.arrayList) { item: ChatDataBase ->
+            viewModel.tryRoomConnect(
+                item
+            )
+        }
+        chat_room_recyclerview.adapter = roomAdapter
     }
 
     override fun observerViewModel() {

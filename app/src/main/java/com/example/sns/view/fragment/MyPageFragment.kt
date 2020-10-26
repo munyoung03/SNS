@@ -30,7 +30,7 @@ class MyPageFragment : BaseFragment<FragmentMypageBinding, MyPageViewModel>() {
 
     override fun init() {
         binding.emailValue.text = MyApplication.prefs.getEmail("email", "no email")
-        binding.username.text = MyApplication.prefs.getUsername("name", "no username")
+        binding.username.text = MyApplication.prefs.getUsername("name", "")
     }
 
     override fun observerViewModel() {

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sns.R
-import com.example.sns.adapter.ChatAdapter
 import com.example.sns.base.BaseActivity
 import com.example.sns.databinding.ActivityChattingBinding
 import com.example.sns.room.ChatDataBase
@@ -14,7 +13,6 @@ import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.toast
 import kotlinx.android.synthetic.main.activity_chatting.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
