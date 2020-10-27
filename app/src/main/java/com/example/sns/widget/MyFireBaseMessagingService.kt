@@ -9,9 +9,13 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.sns.R
+import com.example.sns.room.ChatDataBase
+import com.example.sns.room.DataBase
 import com.example.sns.view.activity.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class MyFireBaseMessagingService : FirebaseMessagingService() {
 
@@ -26,6 +30,13 @@ class MyFireBaseMessagingService : FirebaseMessagingService() {
             Log.d("FCM Log", "알림 메세지: " + remoteMessage.notification!!.body)
             val messageBody = remoteMessage.notification!!.body
             val messageTitle = remoteMessage.notification!!.title
+            DataBase.getInstance(applicationContext)!!.dao().insert(
+                ChatDataBase(
+                    0, "a", "b", "ASDDF", LocalDateTime.now().toEpochSecond(
+                        ZoneOffset.UTC
+                    )
+                )
+            )
             val intent = Intent(this, MainActivity::class.java)
             val pendingIntent =
                 PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
@@ -45,7 +56,7 @@ class MyFireBaseMessagingService : FirebaseMessagingService() {
                     NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
                 notificationManager.createNotificationChannel(channel)
             }
-            notificationManager.notify(0, notificationBuilder.build())
+            notificationManager.notify(remoteMessage.sentTime.toInt(), notificationBuilder.build())
         }
     }
 }

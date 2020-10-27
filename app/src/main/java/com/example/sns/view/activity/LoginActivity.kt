@@ -67,7 +67,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             status.observe(this@LoginActivity, Observer {
                 if (it == "200") {
                     if (check_login.isChecked) {
-                        MyApplication.prefs.setCheckLogin("checklogin", "normal login")
+                        MyApplication.prefs.setCheckLogin("normal login")
                     }
                     toast("로그인 성공")
                     startActivity(MainActivity::class.java)
@@ -100,10 +100,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                                 getFacebookInfo(accessToken)
                                 startActivity(MainActivity::class.java)
                                 if (check_login.isChecked) {
-                                    MyApplication.prefs.setCheckLogin(
-                                        "checklogin",
-                                        "facebook login"
-                                    )
+                                    MyApplication.prefs.setCheckLogin("facebook login")
                                 }
                             } else {
                                 Log.d("TAG", "access token is null")
@@ -150,8 +147,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 val image =
                     resultObject.getJSONObject("picture").getJSONObject("data").getString("url")
                 Log.d("TAG", "이름 $name + 이메일 $email + 이미지 $image")
-                MyApplication.prefs.setUsername("name", name)
-                MyApplication.prefs.setEmail("email", email)
+                MyApplication.prefs.setUsername( name)
+                MyApplication.prefs.setEmail(email)
                 toast(name.toString())
             } catch (e: JSONException) {
                 e.printStackTrace()
@@ -174,7 +171,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 if (task.isSuccessful) {
                     Log.w("LoginActivity", "firebaseAuthWithGoogle 성공", task.exception)
                     if (check_login.isChecked) {
-                        MyApplication.prefs.setCheckLogin("checklogin", "google login")
+                        MyApplication.prefs.setCheckLogin("google login")
                     }
                     startActivity(MainActivity::class.java)
                 } else {

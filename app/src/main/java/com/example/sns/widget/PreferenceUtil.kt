@@ -8,45 +8,51 @@ class PreferenceUtil(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("prefs_name", Context.MODE_PRIVATE)
 
-    fun getEmail(key: String, defValue: String): String {
-        return prefs.getString(key, defValue).toString()
+    fun getEmail( defValue: String): String {
+        return prefs.getString("email", defValue).toString()
     }
 
-    fun setEmail(key: String, str: String?) {
-        prefs.edit().putString(key, str).apply()
+    fun setEmail(str: String?) {
+        prefs.edit().putString("email", str).apply()
     }
 
-    fun getToken(key: String, defValue: String): String {
-        return prefs.getString(key, defValue).toString()
+    fun getToken(defValue: String): String {
+        return prefs.getString("token", defValue).toString()
     }
 
-    fun setToken(key: String, str: String?) {
-        prefs.edit().putString(key, str).apply()
+    fun setToken(str: String?) {
+        prefs.edit().putString("token", str).apply()
     }
 
-    fun getUsername(key: String, defValue: String): String {
-        return prefs.getString(key, defValue).toString()
+    fun getUsername(defValue: String): String {
+        return prefs.getString("userName", defValue).toString()
     }
 
-    fun setUsername(key: String, str: String?) {
-        prefs.edit().putString(key, str).apply()
+    fun setUsername(str: String?) {
+        prefs.edit().putString("userName", str).apply()
     }
 
-    fun setCheckLogin(key: String, str: String?) {
-        prefs.edit().putString(key, str).apply()
+    fun setCheckLogin( str: String?) {
+        prefs.edit().putString("checkLogin", str).apply()
     }
 
-    fun getCheckLogin(key: String, defValue: String): String {
-        return prefs.getString(key, defValue).toString()
+    fun getCheckLogin(defValue: String): String {
+        return prefs.getString("checkLogin", defValue).toString()
     }
 
-    fun setCheckPermission(key: String, bol: Boolean) {
-        prefs.edit().putBoolean(key, bol).apply()
+    fun setCheckPermission(bol: Boolean) {
+        prefs.edit().putBoolean("permission", bol).apply()
     }
 
-    fun getCheckPermission(key: String, defValue: Boolean): Boolean {
-        return prefs.getBoolean(key, defValue)
+    fun getCheckPermission(defValue: Boolean): Boolean {
+        return prefs.getBoolean("permission", defValue)
     }
 
+    fun getLastTime(defValue: Long): Long {
+        return prefs.getLong("lastConnectTime", defValue)
+    }
 
+    fun setLastTime(long: Long?) {
+        prefs.edit().putLong("lastConnectTime", long!!).apply()
+    }
 }

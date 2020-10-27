@@ -12,10 +12,13 @@ import com.example.sns.room.ChatDataBase
 import com.example.sns.room.DataBase
 import com.example.sns.view.activity.ChattingActivity
 import com.example.sns.viewModel.ChattingViewModel
+import com.example.sns.widget.MyApplication
 import com.example.sns.widget.extension.noFinishStartActivity
 import com.example.sns.widget.extension.toast
 import kotlinx.android.synthetic.main.fragment_chatting.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel>() {
 
@@ -82,5 +85,10 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         }
 
         chat_room_recyclerview.adapter = roomAdapter
+    }
+
+    override fun onDestroy() {
+        MyApplication.prefs.setLastTime(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC))
+        super.onDestroy()
     }
 }

@@ -7,6 +7,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.sns.R
+import com.example.sns.room.ChatDataBase
+import com.example.sns.room.DataBase
+import com.example.sns.widget.MyApplication
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {

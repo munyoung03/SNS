@@ -16,7 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 class SplashActivity : AppCompatActivity() {
 
-    val checkLogin: String = MyApplication.prefs.getCheckLogin("checklogin", "null")
+    val checkLogin: String = MyApplication.prefs.getCheckLogin( "null")
     var checkPer: Boolean = false
 
     var permission_list = arrayOf(
@@ -32,7 +32,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
 
-        checkPer = MyApplication.prefs.getCheckPermission("permission", false)
+        checkPer = MyApplication.prefs.getCheckPermission(false)
 
         if (checkPer) {
             login()
@@ -89,7 +89,7 @@ class SplashActivity : AppCompatActivity() {
             for (i in grantResults.indices) {
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     login()
-                    MyApplication.prefs.setCheckPermission("permission", true)
+                    MyApplication.prefs.setCheckPermission(true)
                 } else {
                     toast("퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요")
                     finish()
